@@ -1,7 +1,7 @@
 *.pyc
 *.py~
 *.sqlite3
-
+clap/settings.py
 __pycache__
 migrations
 static/node_modules
