@@ -13,7 +13,7 @@ class Pais(models.Model):
     """
 
     ## Nombre del pais
-    nombre = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=80)
 
     def __str__(self):
         """!
@@ -31,7 +31,7 @@ class Estado(models.Model):
     """!
     Clase que contiene los estados que se encuentran en un país
 
-    @author William Páez (wpaez at cenditel.gob.ve)
+    @author Ing. Roldan Vargas (rvargas at cenditel.gob.ve)
     @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
     @date 14-01-2018
     @version 1.0.0
@@ -59,7 +59,7 @@ class Municipio(models.Model):
     """!
     Clase que contiene los municipios que se encuentran en un estado
 
-    @author William Páez (wpaez at cenditel.gob.ve)
+    @author Ing. Roldan Vargas (rvargas at cenditel.gob.ve)
     @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
     @date 14-01-2018
     @version 1.0.0
@@ -87,7 +87,7 @@ class Ciudad(models.Model):
     """!
     Clase que contiene las ciudades que se encuentran en un estado
 
-    @author William Páez (wpaez at cenditel.gob.ve)
+    @author Ing. Roldan Vargas (rvargas at cenditel.gob.ve)
     @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
     @date 14-01-2018
     @version 1.0.0
@@ -115,7 +115,7 @@ class Parroquia(models.Model):
     """!
     Clase que contiene las parroquias que se encuentran un municipio
 
-    @author William Páez (wpaez at cenditel.gob.ve)
+    @author Ing. Roldan Vargas (rvargas at cenditel.gob.ve)
     @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
     @date 14-01-2018
     @version 1.0.0

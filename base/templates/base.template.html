@@ -11,25 +11,34 @@
                 </div>
                 {% if request.user.is_authenticated %}
                 <ul class="nav navbar-nav">
-                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Persona<span class="caret"></span></a>
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Menú<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Registrar</a></li>
-                            <li><a href="#">Listar</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Otro<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Otro 1</a></li>
-                            <li><a href="#">Otro 2</a></li>
+                          {% if request.user.perfil.nivel == 1 %}
+                          <li><a href="{% url 'municipal_listar' %}">Municipal</a></li>
+                          <li><a href="{% url 'parroquial_listar' %}">Parroquial</a></li>
+                          <li><a href="#">Clap</a></li>
+                          {% elif request.user.perfil.nivel == 2 %}
+                          <li><a href="{% url 'parroquial_listar' %}">Parroquial</a></li>
+                          <li><a href="#">Clap</a></li>
+                          {% elif request.user.perfil.nivel == 3 %}
+                          <li><a href="#">Clap</a></li>
+                          {% endif %}
                         </ul>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> {{ request.user.first_name }}</a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> {{ request.user.username }}</a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url 'password_change' %}"> Cambiar Clave</a></li>
-                        <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Salir</a></li>
+                      {% if request.user.perfil.nivel == 1 %}
+                      <li><a href="{% url 'estadal_actualizar' request.user.id %}"> Perfil</a></li>
+                      {% elif request.user.perfil.nivel == 2 %}
+                      <li><a href="{% url 'municipal_actualizar' request.user.id %}"> Perfil</a></li>
+                      {% elif request.user.perfil.nivel == 3 %}
+                      <li><a href="{% url 'parroquial_actualizar' request.user.id %}"> Perfil</a></li>
+                      {% endif %}
+                      <li><a href="{% url 'password_change' %}"> Cambiar Clave</a></li>
+                      <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out fa-lg" aria-hidden="true"></i> Salir</a></li>
                     </ul>
                 </ul>
                 {% else %}
@@ -43,25 +52,17 @@
         <div class="container-fluid">
             <h2>{% block content_header_title %}{% trans 'Página Principal' %}{% endblock %}</h2>
             {% block contenido %}
-                {% if request.user.is_authenticated %}
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="text-center">Bienvenido {{ request.user.first_name }} {{ request.user.last_name }}</h4>
-                        </div>
-                        <div class="panel-body">
-                            <h4 class="text-center">Proceda a registrar los datos del menú que se habilitó</h4>
-                        </div>
+            {% if request.user.is_authenticated %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="text-center">{{ texto1 }}</h4>
                     </div>
-                {% else %}
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="text-center">Bienvenido al Sistema de Registro</h4>
-                        </div>
-                        <div class="panel-body">
-                            <h4 class="text-center">Inicie sesión para poder empezar a registrar los datos.</h4>
-                        </div>
+                    <div class="panel-body">
+                        <h4 class="text-center">{{ texto2 }}</h4>
+                        <a class="btn btn-primary btn-sm pull-right"href="/admin/">Panel Administrativo</a>
                     </div>
-                {% endif %}
+                </div>
+            {% endif %}
             {% endblock %}
         </div>
         {% include 'base.footer.template.html' %}

@@ -1,53 +1,192 @@
 from django.db import models
 from django.contrib.auth.models import User
-from base.models import Clap
+from base.models import Estado, Municipio, Parroquia
 from django.utils.translation import ugettext_lazy as _
-from base.constant import SEXO, ESTADO_CIVIL, PARENTESCO, NIVEL_USUARIO
+from base.constant import NIVEL
 
 # Create your models here.
 
 class Perfil(models.Model):
+    """!
+    Clase que gestiona el perfil de los usuarios
 
-    ## Cédula de la Persona. Si tiene o no
-    cedula = models.CharField(max_length=9, help_text=_('Cédula de Identidad del usuario'), unique=True, null=True)
+    @author William Páez (wpaez at cenditel.gob.ve)
+    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @date 14-01-2018
+    @version 1.0.0
+    """
 
-    ## +058-416-0708340
-    telefono = models.CharField(max_length=16, help_text=_('Número telefónico de contacto con el usuario'))
+    ## Establece el teléfono del usuario
+    telefono = models.CharField(
+        max_length=15,
+    )
 
-    ## Establece el sexo de la Persona
-    sexo = models.CharField(max_length=1, choices=SEXO)
+    ## Establece el nivel que tiene el usuario en el sistema
+    nivel = models.IntegerField(choices=NIVEL)
 
-    ## Establece la fecha de nacimiento del usuario
-    fecha_nacimiento = models.DateField()
-
-    ## Establece el Estado Civil de la Persona
-    estado_civil = models.CharField(max_length=2, choices=ESTADO_CIVIL)
-
-    ## Establece el parentesto que tiene el jefe familiar con el resto del Grupo Familiar
-    parentesco = models.CharField(max_length=2, choices=PARENTESCO)
-
-    ## Establece quien es el Jefe Familiar (usuario que puede entrar al sistema para consultar)
-    jefe_familiar = models.BooleanField(default=False)
-
-    ## Clap al que pertenece el usuario (ubicación geográfica)
-    clap = models.ForeignKey(Clap, on_delete=models.CASCADE)
-
-    ## Establece la dirección donde vive el usuario
-    direccion = models.CharField(max_length=500)
-
-    ## Nivel de usuario (Este será el último nivel, usuario limitado)
-    nivel_usuario = models.IntegerField()
-
-    ## Establece la relación con el usuario registrado
-    user = models.OneToOneField(User, help_text=_('Relación entre los datos del Jefe Familiar y los datos del usuario del sistema'),
+    ## Establece la relación con el usuario de django
+    user = models.OneToOneField(
+        User, related_name="perfil",
+        help_text=_("Relación entre los datos de registro y el usuario con acceso al sistema"),
         on_delete=models.CASCADE
     )
 
-    ## Establece la relación consigo mismo para que los parientes queden relacionados con el Jefe Familiar
-    users = models.ForeignKey(User, related_name='users', help_text=_('Registra nuevos usuarios y los mantiene relacionados consigo mismo'),
-        on_delete=models.CASCADE
+    def __str__(self):
+        """!
+        Función para representar la clase de forma amigable
+
+        @author William Páez (wpaez at cenditel.gob.ve)
+        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @date 14-01-2018
+        @version 1.0.0
+        """
+
+        return "%s %s" % (self.user.first_name, self.user.last_name)
+
+    class Meta:
+        """!
+        Meta clase para la representación en singular y plural de la clase
+
+        @author William Páez (wpaez at cenditel.gob.ve)
+        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @date 14-01-2018
+        @version 1.0.0
+        """
+
+        verbose_name = _("Perfil")
+        verbose_name_plural = _("Perfiles")
+
+class Estadal(models.Model):
+    """!
+    Clase que gestiona el perfil de los usuarios que pertenecen al nivel estadal
+
+    @author William Páez (wpaez at cenditel.gob.ve)
+    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @date 14-01-2018
+    @version 1.0.0
+    """
+
+    ## Establec la relación con el estado
+    estado = models.OneToOneField(
+        Estado, on_delete=models.CASCADE
     )
 
-    ## Cacula la edad en años que tiene una persona según su fecha de nacimiento
-    def edad(self):
-        return int((datetime.date.today() - self.fecha_nacimiento).days / 365.25  )
+    ## Establec la relación con el perfil
+    perfil = models.OneToOneField(
+        Perfil, on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        """!
+        Función para representar la clase de forma amigable
+
+        @author William Páez (wpaez at cenditel.gob.ve)
+        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @date 14-01-2018
+        @version 1.0.0
+        """
+
+        return "%s %s" % (self.perfil.user.first_name, self.perfil.user.last_name)
+
+    class Meta:
+        """!
+        Meta clase para la representación en singular y plural de la clase
+
+        @author William Páez (wpaez at cenditel.gob.ve)
+        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @date 14-01-2018
+        @version 1.0.0
+        """
+
+        verbose_name = _("Estadal")
+        verbose_name_plural = _("Estadales")
+
+class Municipal(models.Model):
+    """!
+    Clase que gestiona el perfil de los usuarios que pertenecen al nivel municipal
+
+    @author William Páez (wpaez at cenditel.gob.ve)
+    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @date 14-01-2018
+    @version 1.0.0
+    """
+
+    ## Establec la relación con el municipio
+    municipio = models.OneToOneField(
+        Municipio, on_delete=models.CASCADE
+    )
+
+    ## Establece la relación con el perfil
+    perfil = models.OneToOneField(
+        Perfil, on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        """!
+        Función para representar la clase de forma amigable
+
+        @author William Páez (wpaez at cenditel.gob.ve)
+        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @date 14-01-2018
+        @version 1.0.0
+        """
+
+        return "%s %s" % (self.perfil.user.first_name, self.perfil.user.last_name)
+
+    class Meta:
+        """!
+        Meta clase para la representación en singular y plural de la clase
+
+        @author William Páez (wpaez at cenditel.gob.ve)
+        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @date 14-01-2018
+        @version 1.0.0
+        """
+
+        verbose_name = _("Municipal")
+        verbose_name_plural = _("Municipales")
+
+class Parroquial(models.Model):
+    """!
+    Clase que gestiona el perfil de los usuarios que pertenecen al nivel parroquial
+
+    @author William Páez (wpaez at cenditel.gob.ve)
+    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @date 14-01-2018
+    @version 1.0.0
+    """
+
+    ## Establece la relación con la parroquia
+    parroquia = models.OneToOneField(
+        Parroquia, on_delete=models.CASCADE
+    )
+
+    ## Establece la relación con el perfil
+    perfil = models.OneToOneField(
+        Perfil, on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        """!
+        Función para representar la clase de forma amigable
+
+        @author William Páez (wpaez at cenditel.gob.ve)
+        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @date 14-01-2018
+        @version 1.0.0
+        """
+
+        return "%s %s" % (self.perfil.user.first_name, self.perfil.user.last_name)
+
+    class Meta:
+        """!
+        Meta clase para la representación en singular y plural de la clase
+
+        @author William Páez (wpaez at cenditel.gob.ve)
+        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @date 14-01-2018
+        @version 1.0.0
+        """
+
+        verbose_name = _("Parroquial")
+        verbose_name_plural = _("Parroquiales")
