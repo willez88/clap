@@ -33,7 +33,7 @@ class EstadalUpdate(UpdateView):
         @version 1.0.0
         """
 
-        if User.objects.filter(pk=self.kwargs['pk']) and self.request.user.perfil.nivel == 1:
+        if self.request.user.id == self.kwargs['pk'] and self.request.user.perfil.nivel == 1:
             return super(EstadalUpdate, self).dispatch(request, *args, **kwargs)
         else:
             return redirect('error_403')
@@ -118,8 +118,7 @@ class MunicipalList(ListView):
         @version 1.0.0
         """
 
-        user = User.objects.get(username=self.request.user.username)
-        if user.perfil.nivel == 1:
+        if self.request.user.perfil.nivel == 1:
             return super(MunicipalList, self).dispatch(request, *args, **kwargs)
         else:
             return redirect('error_403')
@@ -164,8 +163,7 @@ class MunicipalCreate(CreateView):
         @version 1.0.0
         """
 
-        user = User.objects.get(username=self.request.user.username)
-        if user.perfil.nivel == 1:
+        if self.request.user.perfil.nivel == 1:
             return super(MunicipalCreate, self).dispatch(request, *args, **kwargs)
         else:
             return redirect('error_403')
@@ -255,17 +253,35 @@ class MunicipalUpdate(UpdateView):
         @version 1.0.0
         """
 
-        if User.objects.filter(pk=self.kwargs['pk']) and self.request.user.perfil.nivel == 2:
+        if self.request.user.id == self.kwargs['pk'] and self.request.user.perfil.nivel == 2:
             return super(MunicipalUpdate, self).dispatch(request, *args, **kwargs)
         else:
             return redirect('error_403')
 
     def get_form_kwargs(self):
+        """!
+        Función que envía los datos del usuario logueado al formulario
+
+        @author William Páez (wpaez at cenditel.gob.ve)
+        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @date 14-01-2018
+        @version 1.0.0
+        """
+
         kwargs = super(MunicipalUpdate, self).get_form_kwargs()
         kwargs.update({'user': self.request.user})
         return kwargs
 
     def get_initial(self):
+        """!
+        Función para inicializar los campos con valores por defecto
+
+        @author William Páez (wpaez at cenditel.gob.ve)
+        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @date 14-01-2018
+        @version 1.0.0
+        """
+
         datos_iniciales = super(MunicipalUpdate, self).get_initial()
         perfil = Perfil.objects.get(user=self.object)
         datos_iniciales['telefono'] = perfil.telefono
@@ -381,8 +397,7 @@ class ParroquialCreate(CreateView):
         @version 1.0.0
         """
 
-        user = User.objects.get(username=self.request.user.username)
-        if user.perfil.nivel == 2:
+        if self.request.user.perfil.nivel == 2:
             return super(ParroquialCreate, self).dispatch(request, *args, **kwargs)
         else:
             return redirect('error_403')
@@ -472,7 +487,7 @@ class ParroquialUpdate(UpdateView):
         @version 1.0.0
         """
 
-        if User.objects.filter(pk=self.kwargs['pk']) and self.request.user.perfil.nivel == 3:
+        if self.request.user.id == self.kwargs['pk'] and self.request.user.perfil.nivel == 3:
             return super(ParroquialUpdate, self).dispatch(request, *args, **kwargs)
         else:
             return redirect('error_403')
@@ -486,12 +501,21 @@ class ParroquialUpdate(UpdateView):
         @date 14-01-2018
         @version 1.0.0
         """
-        
+
         kwargs = super(ParroquialUpdate, self).get_form_kwargs()
         kwargs.update({'user': self.request.user})
         return kwargs
 
     def get_initial(self):
+        """!
+        Función para inicializar los campos con valores por defecto
+
+        @author William Páez (wpaez at cenditel.gob.ve)
+        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @date 14-01-2018
+        @version 1.0.0
+        """
+
         datos_iniciales = super(ParroquialUpdate, self).get_initial()
         perfil = Perfil.objects.get(user=self.object)
         datos_iniciales['telefono'] = perfil.telefono
@@ -500,6 +524,15 @@ class ParroquialUpdate(UpdateView):
         return datos_iniciales
 
     def form_valid(self, form):
+        """!
+        Función para verificar que el formulario sea válido
+
+        @author William Páez (wpaez at cenditel.gob.ve)
+        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @date 14-01-2018
+        @version 1.0.0
+        """
+
         self.object = form.save(commit=False)
         self.object.username = form.cleaned_data['username']
         self.object.first_name = form.cleaned_data['first_name']
@@ -519,5 +552,14 @@ class ParroquialUpdate(UpdateView):
         return super(ParroquialUpdate, self).form_valid(form)
 
     def form_invalid(self, form):
+        """!
+        Función que se ejecuta en caso de que el formulario sea inválido
+
+        @author William Páez (wpaez at cenditel.gob.ve)
+        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @date 14-01-2018
+        @version 1.0.0
+        """
+
         print(form.errors)
         return super(ParroquialUpdate, self).form_invalid(form)
