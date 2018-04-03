@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from usuario.models import Estadal, Municipal, Parroquial
+from usuario.models import Estadal, Municipal, Parroquial, JefeClap
 
 # Create your views here.
 
@@ -38,6 +38,11 @@ class InicioView(TemplateView):
             context['texto1'] = 'Bienvenido ' + str(perfil)
             context['texto2'] = 'Usuario nivel parroquia ' + str(parroquial.parroquia) + '. Este usuario permite registrar y monitoriar a los representantes \
             de cada consejo comunal que pertenecen a dicha parroquia'
+        elif perfil.nivel == 4:
+            jefe_clap = JefeClap.objects.get(perfil=perfil)
+            context['texto1'] = 'Bienvenido ' + str(perfil)
+            context['texto2'] = 'Usuario nivel Clap ' + str(jefe_clap.clap) + '. Este usuario permite registrar y monitoriar a los representantes \
+            de cada clap que pertenecen a dicha parroquia'
         return context
 
 class Error403View(TemplateView):

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Perfil, Estadal, Municipal, Parroquial
+from .models import Perfil, Estadal, Municipal, Parroquial, JefeClap
 
 # Register your models here.
 
@@ -34,3 +34,11 @@ class ParroquialAdmin(admin.ModelAdmin):
     ordering = ('parroquia',)
     search_fields = ('municipio','perfil',)
 admin.site.register(Parroquial, ParroquialAdmin)
+
+class JefeClapAdmin(admin.ModelAdmin):
+    list_display = ('perfil','clap',)
+    list_filter = ('perfil','clap',)
+    list_per_page = 25
+    ordering = ('clap',)
+    search_fields = ('parroquia','perfil',)
+admin.site.register(JefeClap, JefeClapAdmin)

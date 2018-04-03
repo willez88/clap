@@ -1,10 +1,10 @@
 from django import forms
 from django.contrib.auth.models import User
-from base.models import Estado, Municipio, Parroquia
+from base.models import Estado, Municipio, Parroquia, Clap
 from django.utils.translation import ugettext_lazy as _
 from django.core import validators
 from base.fields import CedulaField
-from .models import Estadal, Municipal, Parroquial
+from .models import Estadal, Municipal, Parroquial, JefeClap
 
 class PerfilForm(forms.ModelForm):
     """!
@@ -353,6 +353,65 @@ class ParroquialUpdateForm(PerfilForm):
         widget=forms.Select(attrs={
             'class': 'form-control select2', 'data-toggle': 'tooltip', 'style':'width:250px;',
             'title': _("Seleccione la parroquia"),
+        })
+    )
+
+    def clean_verificar_contrasenha(self):
+        pass
+
+    class Meta:
+        model = User
+        exclude = [
+            'perfil','nivel','password','verificar_contrasenha','date_joined','last_login','is_active',
+            'is_superuser','is_staff'
+        ]
+
+class JefeClapForm(PerfilForm):
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super(JefeClapForm, self).__init__(*args, **kwargs)
+        parroquial = Parroquial.objects.get(perfil=user.perfil)
+        lista_clap = [('','Selecione...')]
+        for cl in Clap.objects.filter(parroquia=parroquial.parroquia):
+            lista_clap.append( (cl.codigo,cl.codigo + ' ' + cl.nombre) )
+        self.fields['clap'].choices = lista_clap
+
+    clap = forms.ChoiceField(
+        label=_("Clap"),
+        widget=forms.Select(attrs={
+            'class': 'form-control select2', 'data-toggle': 'tooltip', 'style':'width:250px;',
+            'title': _("Seleccione el clap"),
+        })
+    )
+
+    def clean_clap(self):
+        clap = self.cleaned_data['clap']
+
+        if JefeClap.objects.filter(clap=clap):
+            raise forms.ValidationError(_("Ya existe un usuario asignado a este clap"))
+
+        return clap
+
+class JefeClapUpdateForm(PerfilForm):
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super(JefeClapUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['password'].required = False
+        self.fields['verificar_contrasenha'].required = False
+        self.fields['password'].widget.attrs['disabled'] = True
+        self.fields['verificar_contrasenha'].widget.attrs['disabled'] = True
+        jefe_clap= JefeClap.objects.get(perfil=user.perfil)
+        lista_clap = [('','Selecione...')]
+        for cl in Clap.objects.filter(parroquia=jefe_clap.clap.parroquia):
+            lista_clap.append( (cl.codigo,cl.codigo + ' ' + cl.nombre) )
+        self.fields['clap'].choices = lista_clap
+
+    clap = forms.ChoiceField(
+        label=_("Consejo Comunal"),
+        widget=forms.Select(attrs={
+            'class': 'form-control select2', 'data-toggle': 'tooltip', 'style':'width:250px;',
+            'title': _("Seleccione el clap"),
         })
     )
 

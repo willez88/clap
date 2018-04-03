@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from base.models import Estado, Municipio, Parroquia
+from base.models import Estado, Municipio, Parroquia, Clap
 from django.utils.translation import ugettext_lazy as _
 from base.constant import NIVEL
 
@@ -190,3 +190,41 @@ class Parroquial(models.Model):
 
         verbose_name = _("Parroquial")
         verbose_name_plural = _("Parroquiales")
+
+class JefeClap(models.Model):
+    """!
+    Clase que gestiona el perfil de los usuarios que pertenecen al nivel clap
+
+    @author William Páez (wpaez at cenditel.gob.ve)
+    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @date 10-03-2018
+    @version 1.0.0
+    """
+
+    clap = models.OneToOneField(
+        Clap, on_delete=models.CASCADE
+    )
+
+    perfil = models.OneToOneField(
+        Perfil, on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return "%s %s" % (self.perfil.user.first_name, self.perfil.user.last_name)
+
+    class Meta:
+        verbose_name = _("Jefe Clap")
+        verbose_name_plural = _("Jefes Claps")
+
+class JefeFamiliar(models.Model):
+
+    jefe_clap = models.ForeignKey(
+        JefeClap,on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return "%s %s" % (self.jefe_clap.perfil.user.first_name, self.jefe_clap.perfil.user.last_name)
+
+    class Meta:
+        verbose_name = _("Jefe Familiar")
+        verbose_name_plural = _("Jefes de Familias")

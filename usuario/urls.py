@@ -1,7 +1,10 @@
 from django.urls import path
 from django.contrib.auth import views
 from django.contrib.auth.decorators import login_required
-from .views import MunicipalList, MunicipalCreate, EstadalUpdate, ParroquialList, ParroquialCreate, MunicipalUpdate, ParroquialUpdate
+from .views import (
+    MunicipalList, MunicipalCreate, EstadalUpdate, ParroquialList, ParroquialCreate, MunicipalUpdate, JefeClapList,
+    JefeClapCreate, ParroquialUpdate, JefeClapUpdate
+)
 
 urlpatterns = [
     path('login/', views.LoginView.as_view(template_name='login.html'), name='login'),
@@ -18,4 +21,8 @@ urlpatterns = [
     path('parroquial/registrar/', login_required(ParroquialCreate.as_view()), name='parroquial_registrar'),
 
     path('parroquial/actualizar/<int:pk>/', login_required(ParroquialUpdate.as_view()), name='parroquial_actualizar'),
+    path('jefe-clap/', login_required(JefeClapList.as_view()), name='jefe_clap_listar'),
+    path('jefe-clap/registrar/', login_required(JefeClapCreate.as_view()), name='jefe_clap_registrar'),
+
+    path('jefe-clap/actualizar/<int:pk>/', login_required(JefeClapUpdate.as_view()), name='jefe_clap_actualizar'),
 ]

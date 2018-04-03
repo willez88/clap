@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from .forms import EstadalUpdateForm, MunicipalForm, ParroquialForm, MunicipalUpdateForm, ParroquialUpdateForm
-from .models import Perfil, Estadal, Municipal, Parroquial
+from .forms import EstadalUpdateForm, MunicipalForm, ParroquialForm, MunicipalUpdateForm, ParroquialUpdateForm, JefeClapForm, JefeClapUpdateForm
+from .models import Perfil, Estadal, Municipal, Parroquial, JefeClap
 from django.contrib.auth.models import User
-from base.models import Estado, Municipio, Parroquia
+from base.models import Estado, Municipio, Parroquia, Clap
 
 # Create your views here.
 
@@ -563,3 +563,120 @@ class ParroquialUpdate(UpdateView):
 
         print(form.errors)
         return super(ParroquialUpdate, self).form_invalid(form)
+
+
+class JefeClapList(ListView):
+    model = JefeClap
+    template_name = "usuario.jefe.clap.listar.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.perfil.nivel == 1 or self.request.user.perfil.nivel == 3:
+            return super(JefeClapList, self).dispatch(request, *args, **kwargs)
+        else:
+            return redirect('error_403')
+
+    def get_queryset(self):
+        ## usuario estadal puede ver al nivel clap
+        if Estadal.objects.filter(perfil=self.request.user.perfil):
+            estadal = Estadal.objects.get(perfil=self.request.user.perfil)
+            queryset = JefeClap.objects.filter(clap__parroquia__municipio__estado=estadal.estado)
+            return queryset
+
+        ## usuario parroquial puede ver al clap
+        if Parroquial.objects.filter(perfil=self.request.user.perfil):
+            parroquial = Parroquial.objects.get(perfil=self.request.user.perfil)
+            queryset = JefeClap.objects.filter(clap__parroquia=parroquial.parroquia)
+            return queryset
+
+class JefeClapCreate(CreateView):
+    model = User
+    form_class = JefeClapForm
+    template_name = "usuario.jefe.clap.registrar.html"
+    success_url = reverse_lazy('jefe_clap_listar')
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.perfil.nivel == 3:
+            return super(JefeClapCreate, self).dispatch(request, *args, **kwargs)
+        else:
+            return redirect('error_403')
+
+    def get_form_kwargs(self):
+        kwargs = super(JefeClapCreate, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.username = form.cleaned_data['username']
+        self.object.first_name = form.cleaned_data['first_name']
+        self.object.last_name = form.cleaned_data['last_name']
+        self.object.email = form.cleaned_data['email']
+        self.object.set_password(form.cleaned_data['password'])
+        self.object.is_active = True
+        self.object.save()
+
+        user = User.objects.get(username=self.object.username)
+        perfil = Perfil.objects.create(
+            telefono=form.cleaned_data['telefono'],
+            nivel = 4,
+            user= user
+        )
+
+        clap = Clap.objects.get(pk=form.cleaned_data['consejo_comunal'])
+        JefeClap.objects.create(
+            clap = clap,
+            perfil = perfil
+        )
+        return super(JefeClapCreate, self).form_valid(form)
+
+    def form_invalid(self, form):
+        print(form.errors)
+        return super(JefeClapCreate, self).form_invalid(form)
+
+class JefeClapUpdate(UpdateView):
+    model = User
+    form_class = JefeClapUpdateForm
+    template_name = "usuario.jefe.clap.actualizar.html"
+    success_url = reverse_lazy('inicio')
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.id == self.kwargs['pk'] and self.request.user.perfil.nivel == 4:
+            return super(JefeClapUpdate, self).dispatch(request, *args, **kwargs)
+        else:
+            return redirect('error_403')
+
+    def get_form_kwargs(self):
+        kwargs = super(JefeClapUpdate, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
+    def get_initial(self):
+        datos_iniciales = super(JefeClapUpdate, self).get_initial()
+        perfil = Perfil.objects.get(user=self.object)
+        datos_iniciales['telefono'] = perfil.telefono
+        jefe_clap = JefeClap.objects.get(perfil=perfil)
+        datos_iniciales['clap'] = jefe_clap.clap.codigo
+        return datos_iniciales
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.username = form.cleaned_data['username']
+        self.object.first_name = form.cleaned_data['first_name']
+        self.object.last_name = form.cleaned_data['last_name']
+        self.object.email = form.cleaned_data['email']
+        self.object.save()
+
+        if Perfil.objects.filter(user=self.object):
+            perfil = Perfil.objects.get(user=self.object)
+            perfil.telefono = form.cleaned_data['telefono']
+            perfil.save()
+            if JefeClap.objects.filter(perfil=perfil):
+                jefe_clap = JefeClap.objects.get(perfil=perfil)
+                clap = Clap.objects.get(pk=form.cleaned_data['clap'])
+                jefe_clap.clap = clap
+                jefe_clap.save()
+        return super(JefeClapUpdate, self).form_valid(form)
+
+    def form_invalid(self, form):
+        print(form.errors)
+        return super(JefeClapUpdate, self).form_invalid(form)
