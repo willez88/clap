@@ -1,10 +1,10 @@
 from django import forms
 from django.contrib.auth.models import User
-from base.models import Estado, Municipio, Parroquia, Clap
+from base.models import Pais, Estado, Municipio, Parroquia, Clap
 from django.utils.translation import ugettext_lazy as _
 from django.core import validators
 from base.fields import CedulaField
-from .models import Estadal, Municipal, Parroquial, JefeClap
+from .models import Nacional, Estadal, Municipal, Parroquial, JefeClap
 
 class PerfilForm(forms.ModelForm):
     """!
@@ -100,6 +100,12 @@ class PerfilForm(forms.ModelForm):
         )
     )
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email):
+            raise forms.ValidationError(_("El correo ya esta registrado"))
+        return email
+
     def clean_verificar_contrasenha(self):
         verificar_contrasenha = self.cleaned_data['verificar_contrasenha']
         contrasenha = self.data['password']
@@ -110,7 +116,7 @@ class PerfilForm(forms.ModelForm):
 
     class Meta:
         """!
-        Meta clase del formulario que establece el modelo que se usa y los campos que se excluyen
+        Meta clase del formulario que establece algunas propiedades
 
         @author William Páez (wpaez at cenditel.gob.ve)
         @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
@@ -120,6 +126,95 @@ class PerfilForm(forms.ModelForm):
 
         model = User
         exclude = ['perfil','nivel','date_joined']
+
+class NacionalUpdateForm(PerfilForm):
+    """!
+    Clase que contiene el formulario para poder actualizar los datos de un usuario que tiene nivel Nacional
+
+    @author William Páez (wpaez at cenditel.gob.ve)
+    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @date 04-03-2018
+    @version 1.0.0
+    """
+
+    def __init__(self, *args, **kwargs):
+        """!
+        Función que inicializa el formulario
+
+        @author William Páez (wpaez at cenditel.gob.ve)
+        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @date 04-03-2018
+        @version 1.0.0
+        """
+
+        super(NacionalUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['pais'].required = False
+        self.fields['password'].required = False
+        self.fields['verificar_contrasenha'].required = False
+        self.fields['password'].widget.attrs['disabled'] = True
+        self.fields['verificar_contrasenha'].widget.attrs['disabled'] = True
+
+    ## Estado donde se encuentra el usuario
+    pais = forms.CharField(
+        label=_("País"),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control input-sm', 'data-toggle': 'tooltip', 'style':'width:250px;', 'readonly':'true',
+            'title': _("Indica el nombre del pais"),
+        })
+    )
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(email=email).exclude(username=username):
+            raise forms.ValidationError(_("El correo ya esta registrado"))
+        return email
+
+    def clean_verificar_contrasenha(self):
+        pass
+
+    class Meta:
+        """!
+        Meta clase del formulario que establece algunas propiedades
+
+        @author William Páez (wpaez at cenditel.gob.ve)
+        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @date 14-01-2018
+        @version 1.0.0
+        """
+
+        model = User
+        exclude = [
+            'perfil','nivel','password','verificar_contrasenha','date_joined','last_login','is_active',
+            'is_superuser','is_staff', 'pais'
+        ]
+
+class EstadalForm(PerfilForm):
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super(EstadalForm, self).__init__(*args, **kwargs)
+        nacional = Nacional.objects.get(perfil=user.perfil)
+        lista_estado = [('','Selecione...')]
+        for es in Estado.objects.filter(pais=nacional.pais):
+            lista_estado.append( (es.id,es.nombre) )
+        self.fields['estado'].choices = lista_estado
+
+    estado = forms.ChoiceField(
+        label=_("Estado"),
+        widget=forms.Select(attrs={
+            'class': 'form-control select2', 'data-toggle': 'tooltip', 'style':'width:250px;',
+            'title': _("Seleccione el estado"),
+        })
+    )
+
+    def clean_estado(self):
+        estado = self.cleaned_data['estado']
+
+        if Estadal.objects.filter(estado=estado):
+            raise forms.ValidationError(_("Ya existe un usuario asignado a este estado"))
+
+        return estado
 
 class EstadalUpdateForm(PerfilForm):
     """!
@@ -142,26 +237,34 @@ class EstadalUpdateForm(PerfilForm):
         """
 
         super(EstadalUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['estado'].required = False
         self.fields['password'].required = False
         self.fields['verificar_contrasenha'].required = False
         self.fields['password'].widget.attrs['disabled'] = True
         self.fields['verificar_contrasenha'].widget.attrs['disabled'] = True
 
     ## Estado donde se encuentra el usuario
-    estado = forms.ModelChoiceField(
-        label=_("Estado"), queryset=Estado.objects.all(), empty_label=_("Seleccione..."),
-        widget=forms.Select(attrs={
-            'class': 'form-control select2', 'data-toggle': 'tooltip', 'style':'width:250px;',
-            'title': _("Seleccione el estado"),
+    estado = forms.CharField(
+        label=_("Estado"),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control input-sm', 'data-toggle': 'tooltip', 'style':'width:250px;', 'readonly': 'true',
+            'title': _("Indica el nombre del estado"),
         })
     )
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(email=email).exclude(username=username):
+            raise forms.ValidationError(_("El correo ya esta registrado"))
+        return email
 
     def clean_verificar_contrasenha(self):
         pass
 
     class Meta:
         """!
-        Meta clase del formulario que establec el modelo que se usa y los campos que se excluyen
+        Meta clase del formulario que establece algunas propiedades
 
         @author William Páez (wpaez at cenditel.gob.ve)
         @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
@@ -172,29 +275,12 @@ class EstadalUpdateForm(PerfilForm):
         model = User
         exclude = [
             'perfil','nivel','password','verificar_contrasenha','date_joined','last_login','is_active',
-            'is_superuser','is_staff'
+            'is_superuser','is_staff','estado'
         ]
 
 class MunicipalForm(PerfilForm):
-    """!
-    Clase que contiene el formulario para que el usuario del nivel estadal registre a los usuarios del nivel municipal
-
-    @author William Páez (wpaez at cenditel.gob.ve)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
-    @date 14-01-2018
-    @version 1.0.0
-    """
 
     def __init__(self, *args, **kwargs):
-        """!
-        Función que inicializa el campo municipio cargando todos los municipios que pertenecen al estado que representa el usuario del nivel estadal
-
-        @author William Páez (wpaez at cenditel.gob.ve)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
-        @date 14-01-2018
-        @version 1.0.0
-        """
-
         user = kwargs.pop('user')
         super(MunicipalForm, self).__init__(*args, **kwargs)
         estadal = Estadal.objects.get(perfil=user.perfil)
@@ -203,7 +289,6 @@ class MunicipalForm(PerfilForm):
             lista_municipio.append( (mu.id,mu.nombre) )
         self.fields['municipio'].choices = lista_municipio
 
-    ## Establce el campo municipio
     municipio = forms.ChoiceField(
         label=_("Municipio"),
         widget=forms.Select(attrs={
@@ -221,45 +306,29 @@ class MunicipalForm(PerfilForm):
         return municipio
 
 class MunicipalUpdateForm(PerfilForm):
-    """!
-    Clase que contiene el formulario para poder actualizar los datos de un usuario que tiene nivel municipal
-
-    @author William Páez (wpaez at cenditel.gob.ve)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
-    @date 14-01-2018
-    @version 1.0.0
-    """
-
     def __init__(self, *args, **kwargs):
-        """!
-        Función que inicializa el formulario para omitir los campos de contraseña y cargar los municipios que pertenecen al estado que representa el usuario de nivel estadal
-
-        @author William Páez (wpaez at cenditel.gob.ve)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
-        @date 14-01-2018
-        @version 1.0.0
-        """
-
         user = kwargs.pop('user')
         super(MunicipalUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['municipio'].required = False
         self.fields['password'].required = False
         self.fields['verificar_contrasenha'].required = False
         self.fields['password'].widget.attrs['disabled'] = True
         self.fields['verificar_contrasenha'].widget.attrs['disabled'] = True
-        municipal = Municipal.objects.get(perfil=user.perfil)
-        lista_municipio = [('','Selecione...')]
-        for mu in Municipio.objects.filter(estado=municipal.municipio.estado):
-            lista_municipio.append( (mu.id,mu.nombre) )
-        self.fields['municipio'].choices = lista_municipio
 
-    ## Establece el campo municipio
-    municipio = forms.ChoiceField(
+    municipio = forms.CharField(
         label=_("Municipio"),
-        widget=forms.Select(attrs={
-            'class': 'form-control select2', 'data-toggle': 'tooltip', 'style':'width:250px;',
-            'title': _("Seleccione el municipio"),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control input-sm', 'data-toggle': 'tooltip', 'style':'width:250px;', 'readonly': 'true',
+            'title': _("Indica el nombre del municipio"),
         })
     )
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(email=email).exclude(username=username):
+            raise forms.ValidationError(_("El correo ya esta registrado"))
+        return email
 
     def clean_verificar_contrasenha(self):
         pass
@@ -268,28 +337,12 @@ class MunicipalUpdateForm(PerfilForm):
         model = User
         exclude = [
             'perfil','nivel','password','verificar_contrasenha','date_joined','last_login','is_active',
-            'is_superuser','is_staff'
+            'is_superuser','is_staff','municipio'
         ]
 
 class ParroquialForm(PerfilForm):
-    """!
-    Clase que contiene el formulario para que el usuario del nivel municipal registre a los usuarios del nivel parroquial
-
-    @author William Páez (wpaez at cenditel.gob.ve)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
-    @date 14-01-2018
-    @version 1.0.0
-    """
 
     def __init__(self, *args, **kwargs):
-        """!
-        Función que inicializa el campo parroquia cargando todas las parroquias que pertenecen al municipio que el usuario del nivel estadal representa
-
-        @author William Páez (wpaez at cenditel.gob.ve)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
-        @date 14-01-2018
-        @version 1.0.0
-        """
         user = kwargs.pop('user')
         super(ParroquialForm, self).__init__(*args, **kwargs)
         municipal = Municipal.objects.get(perfil=user.perfil)
@@ -298,7 +351,6 @@ class ParroquialForm(PerfilForm):
             lista_parroquia.append( (pa.id,pa.nombre) )
         self.fields['parroquia'].choices = lista_parroquia
 
-    ## Establece el campo parroquia
     parroquia = forms.ChoiceField(
         label=_("Parroquia"),
         widget=forms.Select(attrs={
@@ -316,45 +368,29 @@ class ParroquialForm(PerfilForm):
         return parroquia
 
 class ParroquialUpdateForm(PerfilForm):
-    """!
-    Clase que contiene el formulario para actualizar los datos de un usuario que tiene nivel parroquial
-
-    @author William Páez (wpaez at cenditel.gob.ve)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
-    @date 14-01-2018
-    @version 1.0.0
-    """
-
     def __init__(self, *args, **kwargs):
-        """!
-        Función que inicializa el formulario para omitir los campos de contraseña y cargar las parroquias que pertenecen al municipio que el usuario de nivel municipal representa
-
-        @author William Páez (wpaez at cenditel.gob.ve)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
-        @date 14-01-2018
-        @version 1.0.0
-        """
-
         user = kwargs.pop('user')
         super(ParroquialUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['parroquia'].required = False
         self.fields['password'].required = False
         self.fields['verificar_contrasenha'].required = False
         self.fields['password'].widget.attrs['disabled'] = True
         self.fields['verificar_contrasenha'].widget.attrs['disabled'] = True
-        parroquial = Parroquial.objects.get(perfil=user.perfil)
-        lista_parroquia = [('','Selecione...')]
-        for pa in Parroquia.objects.filter(municipio=parroquial.parroquia.municipio):
-            lista_parroquia.append( (pa.id,pa.nombre) )
-        self.fields['parroquia'].choices = lista_parroquia
 
-    ## Establece el campo parroquia
-    parroquia = forms.ChoiceField(
+    parroquia = forms.CharField(
         label=_("Parroquia"),
-        widget=forms.Select(attrs={
-            'class': 'form-control select2', 'data-toggle': 'tooltip', 'style':'width:250px;',
-            'title': _("Seleccione la parroquia"),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control input-sm', 'data-toggle': 'tooltip', 'style':'width:250px;', 'readonly': 'true',
+            'title': _("Indica el nombre de la parroquia"),
         })
     )
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(email=email).exclude(username=username):
+            raise forms.ValidationError(_("El correo ya esta registrado"))
+        return email
 
     def clean_verificar_contrasenha(self):
         pass
@@ -363,7 +399,7 @@ class ParroquialUpdateForm(PerfilForm):
         model = User
         exclude = [
             'perfil','nivel','password','verificar_contrasenha','date_joined','last_login','is_active',
-            'is_superuser','is_staff'
+            'is_superuser','is_staff','parroquia'
         ]
 
 class JefeClapForm(PerfilForm):
@@ -385,35 +421,31 @@ class JefeClapForm(PerfilForm):
         })
     )
 
-    def clean_clap(self):
-        clap = self.cleaned_data['clap']
-
-        if JefeClap.objects.filter(clap=clap):
-            raise forms.ValidationError(_("Ya existe un usuario asignado a este clap"))
-
-        return clap
-
 class JefeClapUpdateForm(PerfilForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
         super(JefeClapUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['clap'].required = False
         self.fields['password'].required = False
         self.fields['verificar_contrasenha'].required = False
         self.fields['password'].widget.attrs['disabled'] = True
         self.fields['verificar_contrasenha'].widget.attrs['disabled'] = True
-        jefe_clap= JefeClap.objects.get(perfil=user.perfil)
-        lista_clap = [('','Selecione...')]
-        for cl in Clap.objects.filter(parroquia=jefe_clap.clap.parroquia):
-            lista_clap.append( (cl.codigo,cl.codigo + ' ' + cl.nombre) )
-        self.fields['clap'].choices = lista_clap
 
-    clap = forms.ChoiceField(
-        label=_("Consejo Comunal"),
-        widget=forms.Select(attrs={
-            'class': 'form-control select2', 'data-toggle': 'tooltip', 'style':'width:250px;',
-            'title': _("Seleccione el clap"),
+    clap = forms.CharField(
+        label=_("Clap"),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control input-sm', 'data-toggle': 'tooltip', 'style':'width:250px;', 'readonly': 'true',
+            'title': _("Indica el nombre del clap"),
         })
     )
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        username = self.cleaned_data.get('username')
+        print(username)
+        if User.objects.filter(email=email).exclude(username=username):
+            raise forms.ValidationError(_("El correo ya esta registrado "))
+        return email
 
     def clean_verificar_contrasenha(self):
         pass
@@ -422,5 +454,5 @@ class JefeClapUpdateForm(PerfilForm):
         model = User
         exclude = [
             'perfil','nivel','password','verificar_contrasenha','date_joined','last_login','is_active',
-            'is_superuser','is_staff'
+            'is_superuser','is_staff','clap'
         ]

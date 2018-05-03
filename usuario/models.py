@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from base.models import Estado, Municipio, Parroquia, Clap
+from base.models import Pais, Estado, Municipio, Parroquia, Clap
 from django.utils.translation import ugettext_lazy as _
 from base.constant import NIVEL
 
@@ -55,6 +55,23 @@ class Perfil(models.Model):
 
         verbose_name = _("Perfil")
         verbose_name_plural = _("Perfiles")
+
+class Nacional(models.Model):
+
+    pais = models.OneToOneField(
+        Pais, on_delete=models.CASCADE
+    )
+
+    perfil = models.OneToOneField(
+        Perfil, on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return "%s %s" % (self.perfil.user.first_name, self.perfil.user.last_name)
+
+    class Meta:
+        verbose_name = _("Nacional")
+        verbose_name_plural = _("Nacionales")
 
 class Estadal(models.Model):
     """!

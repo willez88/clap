@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'base',
     'usuario',
+    'beneficiario',
 ]
 
 MIDDLEWARE = [
@@ -146,3 +147,68 @@ LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = 'inicio'
 
 LOGOUT_REDIRECT_URL = 'login'
+
+#EMAIL_USE_TLS = True
+#EMAIL_HOST = 'smtp.gmail.com'
+#EMAIL_PORT = 587
+EMAIL_HOST_USER = 'correo@gmail.com'
+#EMAIL_HOST_PASSWORD = 'clave'
+EMAIL_FROM = EMAIL_HOST_USER
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+## Registro de mensajes al usuario
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
+## Registro de vitácoras de errores (logs)
+LOGS_PATH = ''
+
+## Configuración de los niveles de vitácoras (logs) a registrar
+LOGGING = dict(version=1, disable_existing_loggers=True, formatters={
+    'std': {
+        'format': '%(asctime)s %(levelname)-8s [modulo: %(module)s, funcion: %(funcName)s, linea: %(lineno)d]. %(message)s',
+    }
+}, handlers={
+    'null': {
+        'level': 'DEBUG',
+        'class': 'logging.NullHandler'
+    },
+    'base': {
+        'class': 'logging.handlers.TimedRotatingFileHandler',
+        'level': 'DEBUG',
+        'formatter': 'std',
+        'filename': os.path.join(LOGS_PATH, 'base.log'),
+        'when': 'w6',
+        'interval': 1,
+        'backupCount': 52
+    },
+    'usuario': {
+        'class': 'logging.handlers.TimedRotatingFileHandler',
+        'level': 'DEBUG',
+        'formatter': 'std',
+        'filename': os.path.join(LOGS_PATH, 'usuario.log'),
+        'when': 'w6',
+        'interval': 1,
+        'backupCount': 52
+    },
+}, loggers={
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['usuario']
+    },
+    'base': {
+        'level': 'DEBUG',
+        'handlers': ['base'],
+        'qualname': 'base'
+    },
+    'usuario': {
+        'level': 'DEBUG',
+        'handlers': ['usuario'],
+        'qualname': 'usuario'
+    },
+    'django.request': {
+        'handlers': ['null'],
+        'level': 'ERROR',
+        'propagate': False,
+    }
+})

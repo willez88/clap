@@ -1,12 +1,3 @@
-.blue-table thead{
-   background-color: #3c8dbc;
-   color:white;
-}
-
-.blue-table tbody{
-   text-align: center;
-}
-
 .item-requerido {
     font-size: 10px !important;
     color: #F56954;

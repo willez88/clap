@@ -4,7 +4,7 @@
 {% block contenido %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h4 class="text-left">Listar - Jefe de Claps <a href="{% url 'jefe_clap_registrar' %}" class="btn btn-success btn-sm pull-right">Registrar</a></h4>
+            <h4 class="text-left">Listar - Jefe Clap <a href="{% url 'jefe_clap_registrar' %}" class="btn btn-success btn-sm pull-right">Registrar</a></h4>
         </div>
 
         <div class="panel-body">
@@ -19,17 +19,25 @@
                                 <th>Correo</th>
                                 <th>Teléfono</th>
                                 <th>Clap</th>
+                                <th>Parroquia</th>
+                                <th>Municipio</th>
+                                <th>Estado</th>
+                                <th>País</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for jc in object_list %}
+                            {% for cl in object_list %}
                                 <tr>
-                                <td> {{ jc.perfil.user.username }} </td>
-                                <td> {{ jc.perfil.user.first_name }} </td>
-                                <td> {{ jc.perfil.user.last_name }} </td>
-                                <td> {{ jc.perfil.user.email }} </td>
-                                <td> {{ jf.perfil.telefono }} </td>
-                                <td> {{ jc.clap }} </td>
+                                <td> {{ cl.perfil.user.username }} </td>
+                                <td> {{ cl.perfil.user.first_name }} </td>
+                                <td> {{ cl.perfil.user.last_name }} </td>
+                                <td> {{ cl.perfil.user.email }} </td>
+                                <td> {{ cl.perfil.telefono }} </td>
+                                <td> {{ cl.clap }} </td>
+                                <td> {{ cl.clap.parroquia }} </td>
+                                <td> {{ cl.clap.parroquia.municipio }} </td>
+                                <td> {{ cl.clap.parroquia.municipio.estado }} </td>
+                                <td> {{ cl.clap.parroquia.municipio.estado.pais }} </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -43,64 +51,10 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var tabla= $('#tabla').DataTable({
-                "language": {
-                    "sProcessing":     "Procesando...",
-	                "sLengthMenu":     "Mostrar _MENU_ registros",
-	                "sZeroRecords":    "No se encontraron resultados",
-	                "sEmptyTable":     "Ningún dato disponible en esta tabla",
-	                "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-	                "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-	                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-	                "sInfoPostFix":    "",
-	                "sSearch":         "Buscar:",
-	                "sUrl":            "",
-	                "sInfoThousands":  ",",
-	                "sLoadingRecords": "Cargando...",
-	                "oPaginate": {
-		                "sFirst":    "Primero",
-		                "sLast":     "Último",
-		                "sNext":     "Siguiente",
-		                "sPrevious": "Anterior"
-	                },
-	                "oAria": {
-		                "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-		                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-	                },
-                },
-                "deferRender": true,
-                "scroller": true
-                /*"autoWidth": false,
-                "columnDefs": [
-                    { "width": "150px", "targets": 0 },
-                    { "width": "250px", "targets": 1 },
-                    { "width": "250px", "targets": 2 },
-                    { "width": "250px", "targets": 3 },
-                    { "width": "150px", "targets": 4 },
-                    { "width": "100px", "targets": 5 },
-                ],*/
+                "order": [[ 8, "asc" ],[ 7, "asc" ],[ 6, "asc" ],[ 5, "asc" ]]
             });
 
-            new $.fn.dataTable.Buttons(tabla, {
-            buttons: [
-                {
-                    extend: 'copyHtml5',
-                },
-                {
-                    extend: 'csvHtml5',
-                    fieldBoundary: '',
-                },
-                {
-                    extend: 'excelHtml5',
-                },
-                {
-                    extend: 'pdfHtml5',
-                },
-                {
-                    extend: 'print',
-                },
-              ],
-            });
-            tabla.buttons().container().appendTo(tabla.table().container());
+            inicializar_boton_datatable(tabla);
         });
     </script>
 {% endblock %}
