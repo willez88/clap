@@ -30,6 +30,8 @@
                           {% elif request.user.perfil.nivel == 5 %}
                           <li><a href="{% url 'grupo_familiar_listar' %}">Grupo Familiar</a></li>
                           <li><a href="{% url 'persona_listar' %}">Persona</a></li>
+                          {% elif request.user.perfil.nivel == 6 %}
+                          <li><a href="{% url 'persona_listar' %}">Persona</a></li>
                           {% endif %}
                         </ul>
                     </li>
@@ -48,6 +50,8 @@
                       <li><a href="{% url 'parroquial_actualizar' request.user.id %}"> Perfil</a></li>
                       {% elif request.user.perfil.nivel == 5 %}
                       <li><a href="{% url 'jefe_clap_actualizar' request.user.id %}"> Perfil</a></li>
+                      {% elif request.user.perfil.nivel == 6 %}
+                      <li><a href="{% url 'grupo_familiar_actualizar' request.user.id %}"> Perfil</a></li>
                       {% endif %}
                       <li><a href="{% url 'password_change' %}"> Cambiar Clave</a></li>
                       <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out fa-lg" aria-hidden="true"></i> Salir</a></li>

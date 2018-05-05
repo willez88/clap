@@ -442,7 +442,6 @@ class JefeClapUpdateForm(PerfilForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         username = self.cleaned_data.get('username')
-        print(username)
         if User.objects.filter(email=email).exclude(username=username):
             raise forms.ValidationError(_("El correo ya esta registrado "))
         return email
@@ -455,4 +454,29 @@ class JefeClapUpdateForm(PerfilForm):
         exclude = [
             'perfil','nivel','password','verificar_contrasenha','date_joined','last_login','is_active',
             'is_superuser','is_staff','clap'
+        ]
+
+class GrupoFamiliarUpdateForm(PerfilForm):
+    def __init__(self, *args, **kwargs):
+        super(GrupoFamiliarUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['password'].required = False
+        self.fields['verificar_contrasenha'].required = False
+        self.fields['password'].widget.attrs['disabled'] = True
+        self.fields['verificar_contrasenha'].widget.attrs['disabled'] = True
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(email=email).exclude(username=username):
+            raise forms.ValidationError(_("El correo ya esta registrado "))
+        return email
+
+    def clean_verificar_contrasenha(self):
+        pass
+
+    class Meta:
+        model = User
+        exclude = [
+            'perfil','nivel','password','verificar_contrasenha','date_joined','last_login','is_active',
+            'is_superuser','is_staff'
         ]

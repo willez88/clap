@@ -233,15 +233,19 @@ class JefeClap(models.Model):
         verbose_name = _("Jefe Clap")
         verbose_name_plural = _("Jefes Claps")
 
-class JefeFamiliar(models.Model):
+class GrupoFamiliar(models.Model):
 
     jefe_clap = models.ForeignKey(
         JefeClap,on_delete=models.CASCADE
     )
 
+    perfil = models.OneToOneField(
+        Perfil, on_delete=models.CASCADE
+    )
+
     def __str__(self):
-        return "%s %s" % (self.jefe_clap.perfil.user.first_name, self.jefe_clap.perfil.user.last_name)
+        return "%s %s" % (self.perfil.user.first_name, self.perfil.user.last_name)
 
     class Meta:
-        verbose_name = _("Jefe Familiar")
-        verbose_name_plural = _("Jefes de Familias")
+        verbose_name = _("Grupo Familiar")
+        verbose_name_plural = _("Grupos Familiares")

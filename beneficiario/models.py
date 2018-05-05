@@ -3,15 +3,16 @@ from base.constant import TIPO_TENENCIA, SEXO, PARENTESCO, ESTADO_CIVIL, GRADO_I
 from usuario.models import JefeClap
 from django.utils.translation import ugettext_lazy as _
 import datetime
+from usuario.models import GrupoFamiliar
 
-class GrupoFamiliar(models.Model):
+"""class GrupoFamiliar(models.Model):
     apellido_familia = models.CharField(max_length=100)
     familia_beneficiada = models.BooleanField(default=False)
     tenencia = models.CharField(max_length=2, choices=TIPO_TENENCIA)
     alquilada = models.IntegerField(default=0)
     pasaje = models.BooleanField(default=False)
     observacion = models.TextField()
-    jefe_clap = models.ForeignKey(JefeClap,on_delete=models.CASCADE)
+    jefe_clap = models.ForeignKey(JefeClap,on_delete=models.CASCADE)"""
 
 class Persona(models.Model):
 
@@ -114,7 +115,7 @@ class Persona(models.Model):
     ## Establece alguna observación que se tenga sobre la persona
     observacion = models.TextField()
 
-    ## Establece la relación con el grupo familiar
+    ## Establece la relación con la cuenta de usuario del jefe familiar
     grupo_familiar = models.ForeignKey(GrupoFamiliar,on_delete=models.CASCADE)
 
     ## Cacula la edad en años que tiene una persona según su fecha de nacimiento

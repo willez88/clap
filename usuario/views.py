@@ -3,9 +3,9 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .forms import (
     NacionalUpdateForm, EstadalForm, EstadalUpdateForm, MunicipalForm, ParroquialForm, MunicipalUpdateForm,
-    ParroquialUpdateForm, JefeClapForm, JefeClapUpdateForm
+    ParroquialUpdateForm, JefeClapForm, JefeClapUpdateForm, PerfilForm, GrupoFamiliarUpdateForm
 )
-from .models import Perfil, Nacional, Estadal, Municipal, Parroquial, JefeClap
+from .models import Perfil, Nacional, Estadal, Municipal, Parroquial, JefeClap, GrupoFamiliar
 from django.contrib.auth.models import User
 from base.models import Estado, Municipio, Parroquia, Clap
 from django.conf import settings
@@ -569,3 +569,149 @@ class JefeClapUpdate(UpdateView):
     def form_invalid(self, form):
         print(form.errors)
         return super(JefeClapUpdate, self).form_invalid(form)
+
+class GrupoFamiliarList(ListView):
+    model = Perfil
+    template_name = "usuario.grupo.familiar.listar.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.perfil.nivel == 1 or self.request.user.perfil.nivel == 2 or self.request.user.perfil.nivel == 3 or self.request.user.perfil.nivel == 4 or self.request.user.perfil.nivel == 5:
+            return super(GrupoFamiliarList, self).dispatch(request, *args, **kwargs)
+        else:
+            return redirect('error_403')
+
+    def get_queryset(self):
+        ## usuario nacional puede ver al nivel comunal
+        if Nacional.objects.filter(perfil=self.request.user.perfil):
+            nacional = Nacional.objects.get(perfil=self.request.user.perfil)
+            queryset = JefeFamiliar.objects.filter(jefe_clap__clap__parroquia__municipio__estado__pais=nacional.pais, )
+            return queryset
+
+        ## usuario estadal puede ver al nivel comunal
+        if Estadal.objects.filter(perfil=self.request.user.perfil):
+            estadal = Estadal.objects.get(perfil=self.request.user.perfil)
+            queryset = JefeClap.objects.filter(clap__parroquia__municipio__estado=estadal.estado)
+            return queryset
+
+        ## usuario municipal puede ver al comunal
+        if Municipal.objects.filter(perfil=self.request.user.perfil):
+            municipal = Municipal.objects.get(perfil=self.request.user.perfil)
+            queryset = JefeClap.objects.filter(clap__parroquia__municipio=municipal.municipio)
+            return queryset
+
+        ## usuario parroquial puede ver al comunal
+        if Parroquial.objects.filter(perfil=self.request.user.perfil):
+            parroquial = Parroquial.objects.get(perfil=self.request.user.perfil)
+            queryset = JefeClap.objects.filter(clap__parroquia=parroquial.parroquia)
+            return queryset
+
+        if JefeClap.objects.filter(perfil=self.request.user.perfil):
+            jefe_clap = JefeClap.objects.get(perfil=self.request.user.perfil)
+            queryset = GrupoFamiliar.objects.filter(jefe_clap=jefe_clap)
+            print(queryset)
+            return queryset
+
+class GrupoFamiliarCreate(CreateView):
+    model = User
+    form_class = PerfilForm
+    template_name = "usuario.grupo.familiar.registrar.html"
+    success_url = reverse_lazy('grupo_familiar_listar')
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.perfil.nivel == 5:
+            return super(GrupoFamiliarCreate, self).dispatch(request, *args, **kwargs)
+        else:
+            return redirect('error_403')
+
+    """def get_form_kwargs(self):
+        kwargs = super(JefeFamiliarCreate, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs"""
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.username = form.cleaned_data['username']
+        self.object.first_name = form.cleaned_data['first_name']
+        self.object.last_name = form.cleaned_data['last_name']
+        self.object.email = form.cleaned_data['email']
+        self.object.set_password(form.cleaned_data['password'])
+        self.object.is_active = True
+        self.object.save()
+
+        user = User.objects.get(username=self.object.username)
+        perfil = Perfil.objects.create(
+            telefono=form.cleaned_data['telefono'],
+            nivel = 6,
+            user= user
+        )
+
+        jefe_clap = JefeClap.objects.get(perfil=self.request.user.perfil)
+        GrupoFamiliar.objects.create(
+            jefe_clap = jefe_clap,
+            perfil = perfil
+        )
+
+        admin, admin_email = '', ''
+        if settings.ADMINS:
+            admin = settings.ADMINS[0][0]
+            admin_email = settings.ADMINS[0][1]
+
+        enviado = enviar_correo(self.object.email, 'usuario.bienvenida.mail', EMAIL_SUBJECT_REGISTRO, {'nivel':'Jefe Clap','nombre':self.request.user.first_name,
+            'apellido':self.request.user.last_name, 'correo':self.request.user.email, 'username':self.object.username, 'clave':form.cleaned_data['password'],
+            'admin':admin, 'admin_email':admin_email, 'emailapp':settings.EMAIL_FROM
+        })
+
+        if not enviado:
+            logger.warning(
+                str(_("Ocurrió un inconveniente al enviar por correo las credenciales del usuario [%s]") % self.object.username)
+            )
+
+        return super(GrupoFamiliarCreate, self).form_valid(form)
+
+    def form_invalid(self, form):
+        print(form.errors)
+        return super(GrupoFamiliarCreate, self).form_invalid(form)
+
+class GrupoFamiliarUpdate(UpdateView):
+    model = User
+    form_class = GrupoFamiliarUpdateForm
+    template_name = "usuario.grupo.familiar.actualizar.html"
+    success_url = reverse_lazy('inicio')
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.id == self.kwargs['pk'] and self.request.user.perfil.nivel == 6:
+            return super(GrupoFamiliarUpdate, self).dispatch(request, *args, **kwargs)
+        else:
+            return redirect('error_403')
+
+    """def get_form_kwargs(self):
+        kwargs = super(GrupoFamiliarUpdate, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs"""
+
+    def get_initial(self):
+        datos_iniciales = super(GrupoFamiliarUpdate, self).get_initial()
+        perfil = Perfil.objects.get(user=self.object)
+        datos_iniciales['telefono'] = perfil.telefono
+        grupo_familiar = GrupoFamiliar.objects.get(perfil=perfil)
+        datos_iniciales['jefe_clap'] = grupo_familiar.jefe_clap
+        return datos_iniciales
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.username = form.cleaned_data['username']
+        self.object.first_name = form.cleaned_data['first_name']
+        self.object.last_name = form.cleaned_data['last_name']
+        self.object.email = form.cleaned_data['email']
+        self.object.save()
+
+        if Perfil.objects.filter(user=self.object):
+            perfil = Perfil.objects.get(user=self.object)
+            perfil.telefono = form.cleaned_data['telefono']
+            perfil.save()
+
+        return super(GrupoFamiliarUpdate, self).form_valid(form)
+
+    def form_invalid(self, form):
+        print(form.errors)
+        return super(GrupoFamiliarUpdate, self).form_invalid(form)

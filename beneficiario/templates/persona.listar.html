@@ -10,7 +10,7 @@
         <div class="panel-body">
             <div class="row box-body table-responsive">
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    <table class="table table-striped table-hover table-bordered display dataTable" id="tabla-persona" style="width:6300px;">
+                    <table class="table table-striped table-hover table-bordered display dataTable" id="tabla-persona" style="width:7500px;">
                         <thead>
                             <tr>
                                 <th>Grupo Familiar</th>
@@ -44,6 +44,10 @@
                                 <th>¿Qué sugiere Ud. para mejorar la comunicación en la comunidad?</th>
                                 <th>¿Qué inseguridad presenta la comunidad?</th>
                                 <th>Algún comentario que desee hacer en relación a las necesidades y soluciones en la comunidad</th>
+                                <th>Clap</th>
+                                <th>Parroquia</th>
+                                <th>Municipio</th>
+                                <th>Estado</th>
                                 <th>Observación</th>
                                 <th>Operación</th>
                             </tr>
@@ -51,7 +55,7 @@
                         <tbody>
                             {% for persona in object_list %}
                                 <tr>
-                                <td>{{ persona.grupo_familiar.apellido_familia }}-{{ persona.grupo_familiar.id }}</td>
+                                <td>{{ persona.grupo_familiar.perfil.user.username }}</td>
                                 <td>{{ persona.nombre }} </td>
                                 <td>{{ persona.apellido }}</td>
                                 {% if persona.cedula %}
@@ -102,6 +106,10 @@
                                 <td>{{ persona.mejorar_comunicacion }}</td>
                                 <td>{{ persona.inseguridad }}</td>
                                 <td>{{ persona.comentario }}</td>
+                                <th>{{ persona.grupo_familiar.jefe_clap.clap }}</th>
+                                <th>{{ persona.grupo_familiar.jefe_clap.clap.parroquia }}</th>
+                                <th>{{ persona.grupo_familiar.jefe_clap.clap.parroquia.municipio }}</th>
+                                <th>{{ persona.grupo_familiar.jefe_clap.clap.parroquia.municipio.estado }}</th>
                                 <td>{{ persona.observacion }}</td>
                                 <td> <a href="{% url 'persona_actualizar' persona.id %}" data-toggle="tooltip" title="Actualizar"><i class="fa fa-pencil"></i></a> <a href="{% url 'persona_eliminar' persona.id %}" data-toggle="tooltip" title="Eliminar"><i class="fa fa-remove"></i</a> </td>
                                 </tr>
@@ -151,7 +159,11 @@
                   { "width": "250px", "targets": 29 },
                   { "width": "400px", "targets": 30 },
                   { "width": "300px", "targets": 31 },
-                  { "width": "100px", "targets": 32 },
+                  { "width": "300px", "targets": 32 },
+                  { "width": "300px", "targets": 33 },
+                  { "width": "300px", "targets": 34 },
+                  { "width": "300px", "targets": 35 },
+                  { "width": "100px", "targets": 36 },
               ],
             });
 

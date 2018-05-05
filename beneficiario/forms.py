@@ -4,6 +4,7 @@ from .models import GrupoFamiliar, Persona
 from base.constant import TIPO_TENENCIA, SEXO, PARENTESCO, ESTADO_CIVIL, GRADO_INSTRUCCION, MISION_EDUCATIVA, MISION_SOCIAL, TIPO_INGRESO
 from base.fields import CedulaField
 from django.core import validators
+from usuario.models import GrupoFamiliar
 
 class GrupoFamiliarForm(forms.ModelForm):
 
@@ -74,7 +75,7 @@ class PersonaForm(forms.ModelForm):
 
         lista_grupo_familiar = [('','Selecione...')]
         for gf in GrupoFamiliar.objects.filter(jefe_clap__perfil__user=user):
-            lista_grupo_familiar.append( (gf.id,gf.apellido_familia+"-"+str(gf.id)) )
+            lista_grupo_familiar.append( (gf.id,gf.perfil.user.username) )
         self.fields['grupo_familiar'].choices = lista_grupo_familiar
 
     grupo_familiar = forms.ChoiceField(

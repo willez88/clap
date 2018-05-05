@@ -3,7 +3,7 @@ from django.contrib.auth import views
 from django.contrib.auth.decorators import login_required
 from .views import (
     NacionalUpdate, EstadalList, EstadalCreate, MunicipalList, MunicipalCreate, EstadalUpdate, ParroquialList, ParroquialCreate, MunicipalUpdate, JefeClapList,
-    JefeClapCreate, ParroquialUpdate, JefeClapUpdate
+    JefeClapCreate, ParroquialUpdate, JefeClapUpdate, GrupoFamiliarList, GrupoFamiliarCreate, GrupoFamiliarUpdate
 )
 
 urlpatterns = [
@@ -29,4 +29,8 @@ urlpatterns = [
     path('jefe-clap/registrar/', login_required(JefeClapCreate.as_view()), name='jefe_clap_registrar'),
 
     path('jefe-clap/actualizar/<int:pk>/', login_required(JefeClapUpdate.as_view()), name='jefe_clap_actualizar'),
+    path('grupo-familiar/', login_required(GrupoFamiliarList.as_view()), name='grupo_familiar_listar'),
+    path('grupo-familiar/registrar/', login_required(GrupoFamiliarCreate.as_view()), name='grupo_familiar_registrar'),
+
+    path('grupo-familiar/actualizar/<int:pk>/', login_required(GrupoFamiliarUpdate.as_view()), name='grupo_familiar_actualizar'),
 ]

@@ -170,4 +170,4 @@ class Clap(models.Model):
         @version 1.0.0
         """
 
-        return self.nombre
+        return self.codigo + ' ' + self.nombre

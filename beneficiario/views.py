@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import GrupoFamiliar, Persona
@@ -85,15 +85,35 @@ class PersonaList(ListView):
     model = Persona
     template_name = "persona.listar.html"
 
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.perfil.nivel == 5 or self.request.user.perfil.nivel == 6:
+            return super(PersonaList, self).dispatch(request, *args, **kwargs)
+        else:
+            return redirect('error_403')
+
     def get_queryset(self):
-        queryset = Persona.objects.filter(grupo_familiar__jefe_clap__perfil__user=self.request.user)
-        return queryset
+
+        if JefeClap.objects.filter(perfil=self.request.user.perfil):
+            jefe_clap = JefeClap.objects.get(perfil=self.request.user.perfil)
+            queryset = Persona.objects.filter(grupo_familiar__jefe_clap=jefe_clap)
+            return queryset
+
+        if GrupoFamiliar.objects.filter(perfil=self.request.user.perfil):
+            grupo_familiar = GrupoFamiliar.objects.get(perfil=self.request.user.perfil)
+            queryset = Persona.objects.filter(grupo_familiar=grupo_familiar)
+            return queryset
 
 class PersonaCreate(CreateView):
     model = Persona
     form_class = PersonaForm
     template_name = "persona.registrar.html"
     success_url = reverse_lazy('persona_listar')
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.perfil.nivel == 5:
+            return super(PersonaCreate, self).dispatch(request, *args, **kwargs)
+        else:
+            return redirect('error_403')
 
     def get_form_kwargs(self):
         kwargs = super(PersonaCreate, self).get_form_kwargs()
