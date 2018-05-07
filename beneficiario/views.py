@@ -2,84 +2,9 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import GrupoFamiliar, Persona
-from .forms import GrupoFamiliarForm, PersonaForm
+from .forms import PersonaForm
 from django.contrib.auth.models import User
 from usuario.models import JefeClap
-
-# Create your views here.
-
-class GrupoFamiliarList(ListView):
-    model = GrupoFamiliar
-    template_name = "grupo.familiar.listar.html"
-
-    def get_queryset(self):
-        queryset = GrupoFamiliar.objects.filter(jefe_clap__perfil__user=self.request.user)
-        return queryset
-
-class GrupoFamiliarCreate(CreateView):
-    model = GrupoFamiliar
-    form_class = GrupoFamiliarForm
-    template_name = "grupo.familiar.registrar.html"
-    success_url = reverse_lazy('grupo_familiar_listar')
-
-    def get_form_kwargs(self):
-        kwargs = super(GrupoFamiliarCreate, self).get_form_kwargs()
-        kwargs.update({'user': self.request.user})
-        return kwargs
-
-    def form_valid(self, form):
-
-        self.object = form.save(commit=False)
-        perfil = self.request.user.perfil
-        jefe_clap = JefeClap.objects.get(perfil=perfil)
-        self.object.jefe_clap = jefe_clap
-        self.object.apellido_familia = form.cleaned_data['apellido_familia']
-        if form.cleaned_data['familia_beneficiada']:
-            self.object.familia_beneficiada = form.cleaned_data['familia_beneficiada']
-        self.object.tenencia = form.cleaned_data['tenencia']
-        if form.cleaned_data['tenencia'] == 'AL':
-            self.object.alquilada = form.cleaned_data['alquilada']
-        if form.cleaned_data['pasaje']:
-            self.object.pasaje = form.cleaned_data['pasaje']
-        self.object.observacion = form.cleaned_data['observacion']
-        self.object.save()
-        return super(GrupoFamiliarCreate, self).form_valid(form)
-
-    def form_invalid(self, form):
-        return super(GrupoFamiliarCreate, self).form_invalid(form)
-
-class GrupoFamiliarUpdate(UpdateView):
-    model = GrupoFamiliar
-    form_class = GrupoFamiliarForm
-    template_name = "grupo.familiar.registrar.html"
-    success_url = reverse_lazy('grupo_familiar_listar')
-
-    def get_form_kwargs(self):
-        kwargs = super(GrupoFamiliarUpdate, self).get_form_kwargs()
-        kwargs.update({'user': self.request.user})
-        return kwargs
-
-    def dispatch(self, request, *args, **kwargs):
-        user = User.objects.get(username=self.request.user.username)
-        if not GrupoFamiliar.objects.filter(pk=self.kwargs['pk'],jefe_clap__perfil__user=user):
-            return redirect('base_403')
-        return super(GrupoFamiliarUpdate, self).dispatch(request, *args, **kwargs)
-
-    """def get_initial(self):
-        datos_iniciales = super(GrupoFamiliarUpdate, self).get_initial()
-        grupo_familiar = GrupoFamiliar.objects.get(pk=self.object.id)
-        return datos_iniciales"""
-
-class GrupoFamiliarDelete(DeleteView):
-    model = GrupoFamiliar
-    template_name = "grupo.familiar.eliminar.html"
-    success_url = reverse_lazy('grupo_familiar_listar')
-
-    def dispatch(self, request, *args, **kwargs):
-        user = User.objects.get(username=self.request.user.username)
-        if not GrupoFamiliar.objects.filter(pk=self.kwargs['pk'],jefe_clap__perfil__user=user):
-            return redirect('base_403')
-        return super(GrupoFamiliarDelete, self).dispatch(request, *args, **kwargs)
 
 class PersonaList(ListView):
     model = Persona
