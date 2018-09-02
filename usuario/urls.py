@@ -3,7 +3,8 @@ from django.contrib.auth import views
 from django.contrib.auth.decorators import login_required
 from .views import (
     NacionalUpdate, EstadalList, EstadalCreate, MunicipalList, MunicipalCreate, EstadalUpdate, ParroquialList, ParroquialCreate, MunicipalUpdate, JefeClapList,
-    JefeClapCreate, ParroquialUpdate, JefeClapUpdate, GrupoFamiliarList, GrupoFamiliarCreate, GrupoFamiliarUpdate
+    JefeClapCreate, ParroquialUpdate, JefeClapUpdate, GrupoFamiliarList, GrupoFamiliarCreate, GrupoFamiliarUpdate,
+    StreetLeaderListView, StreetLeaderCreateView, StreetLeaderUpdateView
 )
 
 urlpatterns = [
@@ -29,6 +30,10 @@ urlpatterns = [
     path('jefe-clap/registrar/', login_required(JefeClapCreate.as_view()), name='jefe_clap_registrar'),
 
     path('jefe-clap/actualizar/<int:pk>/', login_required(JefeClapUpdate.as_view()), name='jefe_clap_actualizar'),
+    path('street-leader/', login_required(StreetLeaderListView.as_view()), name='street_leader_list'),
+    path('street-leader/create/', login_required(StreetLeaderCreateView.as_view()), name='street_leader_create'),
+
+    path('street-leader/update/<int:pk>/', login_required(StreetLeaderUpdateView.as_view()), name='street_leader_update'),
     path('grupo-familiar/', login_required(GrupoFamiliarList.as_view()), name='grupo_familiar_listar'),
     path('grupo-familiar/registrar/', login_required(GrupoFamiliarCreate.as_view()), name='grupo_familiar_registrar'),
 

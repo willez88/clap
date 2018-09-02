@@ -233,10 +233,34 @@ class JefeClap(models.Model):
         verbose_name = _("Jefe Clap")
         verbose_name_plural = _("Jefes Claps")
 
+class StreetLeader(models.Model):
+    """!
+    Clase que gestiona el perfil de los usuarios que pertenecen al nivel Líder de Calle
+
+    @author William Páez (wpaez at cenditel.gob.ve)
+    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @date 31-08-2018
+    """
+
+    jefe_clap = models.OneToOneField(
+        JefeClap, on_delete=models.CASCADE
+    )
+
+    perfil = models.OneToOneField(
+        Perfil, on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return '%s %s' % (self.perfil.user.first_name, self.perfil.user.last_name)
+
+    class Meta:
+        verbose_name = _('Lider de Calle')
+        verbose_name_plural = _('Líderes de Calle')
+
 class GrupoFamiliar(models.Model):
 
-    jefe_clap = models.ForeignKey(
-        JefeClap,on_delete=models.CASCADE
+    street_leader = models.ForeignKey(
+        StreetLeader,on_delete=models.CASCADE
     )
 
     perfil = models.OneToOneField(

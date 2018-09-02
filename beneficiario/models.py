@@ -5,15 +5,6 @@ from django.utils.translation import ugettext_lazy as _
 import datetime
 from usuario.models import GrupoFamiliar
 
-"""class GrupoFamiliar(models.Model):
-    apellido_familia = models.CharField(max_length=100)
-    familia_beneficiada = models.BooleanField(default=False)
-    tenencia = models.CharField(max_length=2, choices=TIPO_TENENCIA)
-    alquilada = models.IntegerField(default=0)
-    pasaje = models.BooleanField(default=False)
-    observacion = models.TextField()
-    jefe_clap = models.ForeignKey(JefeClap,on_delete=models.CASCADE)"""
-
 class Persona(models.Model):
 
     ## Nombre de la Persona
@@ -55,7 +46,7 @@ class Persona(models.Model):
     ## Establece el Estado Civil de la Persona
     estado_civil = models.CharField(max_length=2, choices=ESTADO_CIVIL)
 
-    ## Establece el Grado de Instrucción de la Persona
+    """## Establece el Grado de Instrucción de la Persona
     grado_instruccion = models.CharField(max_length=2, choices=GRADO_INSTRUCCION)
 
     ## Establece la Misión Educativa que tiene la Persona
@@ -110,7 +101,7 @@ class Persona(models.Model):
     inseguridad = models.CharField(max_length=500)
 
     ## Establece algún comentario que la Persona quiera hacer en relación a las necesidades de la comunidad
-    comentario = models.CharField(max_length=500)
+    comentario = models.CharField(max_length=500)"""
 
     ## Establece alguna observación que se tenga sobre la persona
     observacion = models.TextField()

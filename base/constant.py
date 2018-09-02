@@ -19,7 +19,8 @@ NIVEL = (
     (3, 'Nivel Municipal'),
     (4, 'Nivel Parroquial'),
     (5, 'Nivel Jefe de Clap'),
-    (6, 'Nivel Grupo Familiar'),
+    (6, 'Nivel líder de calle'),
+    (7, 'Nivel Grupo Familiar'),
 )
 
 ## Mensaje de error para peticiones AJAX

@@ -18,19 +18,25 @@
                           <li><a href="{% url 'municipal_listar' %}">Municipal</a></li>
                           <li><a href="{% url 'parroquial_listar' %}">Parroquial</a></li>
                           <li><a href="{% url 'jefe_clap_listar' %}">Clap</a></li>
+                          <li><a href="{% url 'street_leader_list' %}">Líder de Calle</a></li>
                           {% elif request.user.perfil.nivel == 2 %}
                           <li><a href="{% url 'municipal_listar' %}">Municipal</a></li>
                           <li><a href="{% url 'parroquial_listar' %}">Parroquial</a></li>
                           <li><a href="{% url 'jefe_clap_listar' %}">Clap</a></li>
+                          <li><a href="{% url 'street_leader_list' %}">Líder de Calle</a></li>
                           {% elif request.user.perfil.nivel == 3 %}
                           <li><a href="{% url 'parroquial_listar' %}">Parroquial</a></li>
                           <li><a href="{% url 'jefe_clap_listar' %}">Clap</a></li>
+                          <li><a href="{% url 'street_leader_list' %}">Líder de Calle</a></li>
                           {% elif request.user.perfil.nivel == 4 %}
                           <li><a href="{% url 'jefe_clap_listar' %}">Clap</a></li>
+                          <li><a href="{% url 'street_leader_list' %}">Líder de Calle</a></li>
                           {% elif request.user.perfil.nivel == 5 %}
+                          <li><a href="{% url 'street_leader_list' %}">Líder de Calle</a></li>
+                          {% elif request.user.perfil.nivel == 6 %}
                           <li><a href="{% url 'grupo_familiar_listar' %}">Grupo Familiar</a></li>
                           <li><a href="{% url 'persona_listar' %}">Persona</a></li>
-                          {% elif request.user.perfil.nivel == 6 %}
+                          {% elif request.user.perfil.nivel == 7 %}
                           <li><a href="{% url 'persona_listar' %}">Persona</a></li>
                           {% endif %}
                         </ul>
@@ -51,6 +57,8 @@
                       {% elif request.user.perfil.nivel == 5 %}
                       <li><a href="{% url 'jefe_clap_actualizar' request.user.id %}"> Perfil</a></li>
                       {% elif request.user.perfil.nivel == 6 %}
+                      <li><a href="{% url 'street_leader_update' request.user.id %}"> Perfil</a></li>
+                      {% elif request.user.perfil.nivel == 7 %}
                       <li><a href="{% url 'grupo_familiar_actualizar' request.user.id %}"> Perfil</a></li>
                       {% endif %}
                       <li><a href="{% url 'password_change' %}"> Cambiar Clave</a></li>
@@ -75,7 +83,6 @@
                     </div>
                     <div class="panel-body">
                         <h4 class="text-center">{{ texto2 }}</h4>
-                        <a class="btn btn-primary btn-sm pull-right"href="/admin/">Panel Administrativo</a>
                     </div>
                 </div>
             {% endif %}

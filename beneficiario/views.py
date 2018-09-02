@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import GrupoFamiliar, Persona
+from usuario.models import StreetLeader
 from .forms import PersonaForm
 from django.contrib.auth.models import User
 from usuario.models import JefeClap
@@ -11,16 +12,17 @@ class PersonaList(ListView):
     template_name = "persona.listar.html"
 
     def dispatch(self, request, *args, **kwargs):
-        if self.request.user.perfil.nivel == 5 or self.request.user.perfil.nivel == 6:
+        if self.request.user.perfil.nivel == 6 or self.request.user.perfil.nivel == 7:
             return super(PersonaList, self).dispatch(request, *args, **kwargs)
         else:
             return redirect('error_403')
 
     def get_queryset(self):
 
-        if JefeClap.objects.filter(perfil=self.request.user.perfil):
-            jefe_clap = JefeClap.objects.get(perfil=self.request.user.perfil)
-            queryset = Persona.objects.filter(grupo_familiar__jefe_clap=jefe_clap)
+        if StreetLeader.objects.filter(perfil=self.request.user.perfil):
+            street_leader = StreetLeader.objects.get(perfil=self.request.user.perfil)
+            queryset = Persona.objects.filter(grupo_familiar__street_leader__jefe_clap__clap=street_leader.jefe_clap.clap)
+            print(queryset)
             return queryset
 
         if GrupoFamiliar.objects.filter(perfil=self.request.user.perfil):
@@ -35,7 +37,7 @@ class PersonaCreate(CreateView):
     success_url = reverse_lazy('persona_listar')
 
     def dispatch(self, request, *args, **kwargs):
-        if self.request.user.perfil.nivel == 5:
+        if self.request.user.perfil.nivel == 6:
             return super(PersonaCreate, self).dispatch(request, *args, **kwargs)
         else:
             return redirect('error_403')
@@ -63,27 +65,6 @@ class PersonaCreate(CreateView):
         if form.cleaned_data['jefe_familiar']:
             self.object.jefe_familiar = form.cleaned_data['jefe_familiar']
         self.object.estado_civil = form.cleaned_data['estado_civil']
-        self.object.grado_instruccion = form.cleaned_data['grado_instruccion']
-        self.object.mision_educativa = form.cleaned_data['mision_educativa']
-        self.object.profesion = form.cleaned_data['profesion']
-        self.object.ocupacion = form.cleaned_data['ocupacion']
-        self.object.lugar_trabajo = form.cleaned_data['lugar_trabajo']
-        if form.cleaned_data['jubilado']:
-            self.object.jubilado = form.cleaned_data['jubilado']
-        if form.cleaned_data['pensionado']:
-            self.object.pensionado = form.cleaned_data['pensionado']
-        self.object.ingreso = form.cleaned_data['ingreso']
-        self.object.deporte = form.cleaned_data['deporte']
-        self.object.enfermedad = form.cleaned_data['enfermedad']
-        self.object.discapacidad = form.cleaned_data['discapacidad']
-        if form.cleaned_data['ley_consejo_comunal']:
-            self.object.ley_consejo_comunal = form.cleaned_data['ley_consejo_comunal']
-        self.object.curso = form.cleaned_data['curso']
-        self.object.organizacion_comunitaria = form.cleaned_data['organizacion_comunitaria']
-        self.object.ocio = form.cleaned_data['ocio']
-        self.object.mejorar_comunicacion = form.cleaned_data['mejorar_comunicacion']
-        self.object.inseguridad = form.cleaned_data['inseguridad']
-        self.object.comentario = form.cleaned_data['comentario']
         self.object.observacion = form.cleaned_data['observacion']
         self.object.save()
         return super(PersonaCreate, self).form_valid(form)
@@ -104,7 +85,7 @@ class PersonaUpdate(UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         user = User.objects.get(username=self.request.user.username)
-        if not Persona.objects.filter(pk=self.kwargs['pk'],grupo_familiar__jefe_clap__perfil__user=user):
+        if not Persona.objects.filter(pk=self.kwargs['pk'],grupo_familiar__street_leader__perfil__user=user):
             return redirect('base_403')
         return super(PersonaUpdate, self).dispatch(request, *args, **kwargs)
 
@@ -134,6 +115,6 @@ class PersonaDelete(DeleteView):
 
     def dispatch(self, request, *args, **kwargs):
         user = User.objects.get(username=self.request.user.username)
-        if not Persona.objects.filter(pk=self.kwargs['pk'],grupo_familiar__jefe_clap__perfil__user=user):
+        if not Persona.objects.filter(pk=self.kwargs['pk'],grupo_familiar__street_leader__perfil__user=user):
             return redirect('base_403')
         return super(PersonaDelete, self).dispatch(request, *args, **kwargs)

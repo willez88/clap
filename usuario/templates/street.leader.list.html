@@ -4,7 +4,7 @@
 {% block contenido %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h4 class="text-left">Listar - Jefe Familiar <a href="{% url 'grupo_familiar_registrar' %}" class="btn btn-success btn-sm pull-right">Registrar</a></h4>
+            <h4 class="text-left">Listar - Líder de Calle <a href="{% url 'street_leader_create' %}" class="btn btn-success btn-sm pull-right">Registrar</a></h4>
         </div>
 
         <div class="panel-body">
@@ -26,18 +26,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for jf in object_list %}
+                            {% for sl in object_list %}
                                 <tr>
-                                <td> {{ jf.perfil.user.username }} </td>
-                                <td> {{ jf.perfil.user.first_name }} </td>
-                                <td> {{ jf.perfil.user.last_name }} </td>
-                                <td> {{ jf.perfil.user.email }} </td>
-                                <td> {{ jf.perfil.telefono }} </td>
-                                <td> {{ jf.street_leader.jefe_clap.clap }} </td>
-                                <td> {{ jf.street_leader.jefe_clap.clap.parroquia }} </td>
-                                <td> {{ jf.street_leader.jefe_clap.clap.parroquia.municipio }} </td>
-                                <td> {{ jf.street_leader.jefe_clap.clap.parroquia.municipio.estado }} </td>
-                                <td> {{ jf.street_leader.jefe_clap.clap.parroquia.municipio.estado.pais }} </td>
+                                <td> {{ sl.perfil.user.username }} </td>
+                                <td> {{ sl.perfil.user.first_name }} </td>
+                                <td> {{ sl.perfil.user.last_name }} </td>
+                                <td> {{ sl.perfil.user.email }} </td>
+                                <td> {{ sl.perfil.telefono }} </td>
+                                <td> {{ sl.jefe_clap.clap }} </td>
+                                <td> {{ sl.jefe_clap.clap.parroquia }} </td>
+                                <td> {{ sl.jefe_clap.clap.parroquia.municipio }} </td>
+                                <td> {{ sl.jefe_clap.clap.parroquia.municipio.estado }} </td>
+                                <td> {{ sl.jefe_clap.clap.parroquia.municipio.estado.pais }} </td>
                                 </tr>
                             {% endfor %}
                         </tbody>

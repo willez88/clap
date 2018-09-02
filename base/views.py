@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from usuario.models import Nacional, Estadal, Municipal, Parroquial, JefeClap, GrupoFamiliar
+from usuario.models import Nacional, Estadal, Municipal, Parroquial, JefeClap, StreetLeader, GrupoFamiliar
 
 # Create your views here.
 
@@ -26,29 +26,34 @@ class InicioView(TemplateView):
         elif perfil.nivel == 1:
             nacional = Nacional.objects.get(perfil=perfil)
             context['texto1'] = 'Bienvenido ' + str(perfil)
-            context['texto2'] = 'Usuario nivel nacional ' + str(nacional.pais) + '. Este usuario permite registrar y monitoriar a los representantes de \
+            context['texto2'] = 'Usuario nivel nacional ' + str(nacional.pais) + '. Este usuario permite registrar y monitorear a los representantes de \
             cada estado que pertenecen a dicho país'
         elif perfil.nivel == 2:
             estadal = Estadal.objects.get(perfil=perfil)
             context['texto1'] = 'Bienvenido ' + str(perfil)
-            context['texto2'] = 'Usuario nivel estado ' + str(estadal.estado) + '. Este usuario permite registrar y monitoriar a los representantes de \
+            context['texto2'] = 'Usuario nivel estado ' + str(estadal.estado) + '. Este usuario permite registrar y monitorear a los representantes de \
             cada municipio que pertenecen a dicho estado'
         elif perfil.nivel == 3:
             municipal = Municipal.objects.get(perfil=perfil)
             context['texto1'] = 'Bienvenido ' + str(perfil)
-            context['texto2'] = 'Usuario nivel municipio ' + str(municipal.municipio) + '. Este usuario permite registrar y monitoriar a los representantes \
+            context['texto2'] = 'Usuario nivel municipio ' + str(municipal.municipio) + '. Este usuario permite registrar y monitorear a los representantes \
             de cada parroquia que pertenecen a dicho municipio'
         elif perfil.nivel == 4:
             parroquial = Parroquial.objects.get(perfil=perfil)
             context['texto1'] = 'Bienvenido ' + str(perfil)
-            context['texto2'] = 'Usuario nivel parroquia ' + str(parroquial.parroquia) + '. Este usuario permite registrar y monitoriar a los representantes \
-            de cada consejo comunal que pertenecen a dicha parroquia'
+            context['texto2'] = 'Usuario nivel parroquia ' + str(parroquial.parroquia) + '. Este usuario permite registrar y monitorear a los representantes \
+            de cada clap que pertenecen a dicha parroquia'
         elif perfil.nivel == 5:
             jefe_clap = JefeClap.objects.get(perfil=perfil)
             context['texto1'] = 'Bienvenido ' + str(perfil)
-            context['texto2'] = 'Usuario nivel Clap ' + str(jefe_clap.clap) + '. Este usuario permite registrar y monitoriar a los representantes \
+            context['texto2'] = 'Usuario nivel Clap ' + str(jefe_clap.clap) + '. Este usuario permite registrar y monitorear a los representantes \
             de cada clap que pertenecen a dicha parroquia'
         elif perfil.nivel == 6:
+            street_leader = StreetLeader.objects.get(perfil=perfil)
+            context['texto1'] = 'Bienvenido ' + str(perfil)
+            context['texto2'] = 'Usuario nivel Líder de Calle perteneciente a' + str(street_leader.jefe_clap.clap) + '. Este usuario permite registrar y monitorear a \
+            cada Líder de Calle que pertenecen a dicha parroquia'
+        elif perfil.nivel == 7:
             grupo_familiar = GrupoFamiliar.objects.get(perfil=perfil)
             context['texto1'] = 'Bienvenido ' + str(perfil)
             context['texto2'] = 'Usuario nivel grupo familiar. Este usuario permite responder una encuesta acerca de la frecuencia con que le llega el clap'
