@@ -3,13 +3,13 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import get_template
 
-def enviar_correo(email, template, subject, vars = None):
+def send_email(email, template, subject, vars = None):
     """!
     Función que envía correos electrónicos
 
     @author Ing. Roldan Vargas (rvargas at cenditel.gob.ve)
+    @author William Páez (paez.william8 at gmail.com)
     @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
-    @date 22-08-2016
     @param email    <b>{string}</b> Dirección de correo electrónico del destinatario.
     @param template <b>{string}</b> Nombre de la plantilla de correo electrónico a utilizar.
     @param subject  <b>{string}</b> Texto del asunto que contendrá el correo electrónico.
@@ -26,5 +26,5 @@ def enviar_correo(email, template, subject, vars = None):
         #logger.info("Correo enviado a %s usando la plantilla %s" % (email, template))
         return True
     except smtplib.SMTPException as e:
-        print("Error al enviar el correo")
+        print('Error al enviar el correo')
         return False

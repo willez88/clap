@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'base',
-    'usuario',
-    'beneficiario',
+    'user.apps.UserConfig',
+    'beneficiary',
 ]
 
 MIDDLEWARE = [
@@ -141,11 +141,11 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static/'),
 )
 
-LOGIN_URL = 'login'
+LOGIN_URL = 'user:login'
 
-LOGIN_REDIRECT_URL = 'inicio'
+LOGIN_REDIRECT_URL = 'base:home'
 
-LOGOUT_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = 'user:login'
 
 #EMAIL_USE_TLS = True
 #EMAIL_HOST = 'smtp.gmail.com'
@@ -185,7 +185,7 @@ LOGGING = dict(version=1, disable_existing_loggers=True, formatters={
         'class': 'logging.handlers.TimedRotatingFileHandler',
         'level': 'DEBUG',
         'formatter': 'std',
-        'filename': os.path.join(LOGS_PATH, 'usuario.log'),
+        'filename': os.path.join(LOGS_PATH, 'user.log'),
         'when': 'w6',
         'interval': 1,
         'backupCount': 52
@@ -193,17 +193,17 @@ LOGGING = dict(version=1, disable_existing_loggers=True, formatters={
 }, loggers={
     'root': {
         'level': 'DEBUG',
-        'handlers': ['usuario']
+        'handlers': ['user']
     },
     'base': {
         'level': 'DEBUG',
         'handlers': ['base'],
         'qualname': 'base'
     },
-    'usuario': {
+    'user': {
         'level': 'DEBUG',
-        'handlers': ['usuario'],
-        'qualname': 'usuario'
+        'handlers': ['user'],
+        'qualname': 'user'
     },
     'django.request': {
         'handlers': ['null'],

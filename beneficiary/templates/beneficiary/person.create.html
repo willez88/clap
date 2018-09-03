@@ -1,0 +1,294 @@
+{% extends 'base/base.html' %}
+{% load i18n %}
+{% block content_header_title %}Persona{% endblock %}
+{% block content %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="text-left">{% if not form.instance.pk %}Registrar{% else %}Actualizar{% endif %}</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="panel-body">
+      <form action="" role="form" class="form form-horizontal validate-form" method="post" autocomplete="off">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group {% if form.family_group.errors %}has-error{% endif %}">
+              <label class="col-md-3 col-xs-3 col-sm-3 control-label" for="{{ form.family_group.auto_id }}">
+                {{ form.family_group.label }}
+              </label>
+              <div class="col-md-9 col-xs-9 col-sm-9">
+                <div class="form-inline">
+                  {{ form.family_group }}
+                  <i class="ion ion-ios-medical item-required"></i>
+                </div>
+                {% include 'base/form.errors.html' with form_errors=form.family_group.errors col_title_error='col-sm-2' col_msg_error='col-sm-10' %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group {% if form.first_name.errors %}has-error{% endif %}">
+              <label class="col-md-3 col-xs-3 col-sm-3 control-label" for="{{ form.first_name.auto_id }}">
+                {{ form.first_name.label }}
+              </label>
+              <div class="col-md-9 col-xs-9 col-sm-9">
+                <div class="form-inline">
+                  {{ form.first_name }}
+                  <i class="ion ion-ios-medical item-required"></i>
+                </div>
+                {% include 'base/form.errors.html' with form_errors=form.first_name.errors col_title_error='col-sm-2' col_msg_error='col-sm-10' %}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group {% if form.last_name.errors %}has-error{% endif %}">
+              <label class="col-md-3 col-xs-3 col-sm-3 control-label" for="{{ form.last_name.auto_id }}">
+                {{ form.last_name.label }}
+              </label>
+              <div class="col-md-9 col-xs-9 col-sm-9">
+                <div class="form-inline">
+                  {{ form.last_name }}
+                  <i class="ion ion-ios-medical item-required"></i>
+                </div>
+                {% include 'base/form.errors.html' with form_errors=form.last_name.errors col_title_error='col-sm-2' col_msg_error='col-sm-10' %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group {% if form.has_identity_card.errors %}has-error{% endif %}">
+              <label class="col-md-3 col-xs-3 col-sm-3 control-label" for="{{ form.has_identity_card.auto_id }}">
+                {{ form.has_identity_card.label }}
+              </label>
+              <div class="col-md-9 col-xs-9 col-sm-9">
+                <div class="form-inline">
+                  {{ form.has_identity_card }}
+                </div>
+                {% include 'base/form.errors.html' with form_errors=form.has_identity_card.errors col_title_error='col-sm-2' col_msg_error='col-sm-10' %}
+              </div>
+            </div>
+          </div>
+          <div id="block_identity_card">
+            <div class="col-md-6 col-sm-6 col-xs-6">
+              <div class="form-group {% if form.identity_card.errors %}has-error{% endif %}">
+                <label class="col-md-3 col-xs-3 col-sm-3 control-label" for="{{ form.identity_card.auto_id }}">
+                  {{ form.identity_card.label }}
+                </label>
+                <div class="col-md-9 col-xs-9 col-sm-9">
+                  <div class="form-inline">
+                    {{ form.identity_card }}
+                  </div>
+                  {% include 'base/form.errors.html' with form_errors=form.identity_card.errors col_title_error='col-sm-2' col_msg_error='col-sm-10' %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group {% if form.phone.errors %}has-error{% endif %}">
+              <label class="col-md-3 col-xs-3 col-sm-3 control-label" for="{{ form.phone.auto_id }}">
+                {{ form.phone.label }}
+              </label>
+              <div class="col-md-9 col-xs-9 col-sm-9">
+                <div class="form-inline">
+                  {{ form.phone }}
+                  <i class="ion ion-ios-medical item-required"></i>
+                </div>
+                <span class="text-muted">{{ form.phone.help_text }}</span>
+                {% include 'base/form.errors.html' with form_errors=form.phone.errors col_title_error='col-sm-2' col_msg_error='col-sm-10' %}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group {% if form.email.errors %}has-error{% endif %}">
+              <label class="col-md-3 col-xs-3 col-sm-3 control-label" for="{{ form.email.auto_id }}">
+                {{ form.email.label }}
+              </label>
+              <div class="col-md-9 col-xs-9 col-sm-9">
+                <div class="form-inline">
+                  {{ form.email }}
+                </div>
+                {% include 'base/form.errors.html' with form_errors=form.email.errors col_title_error='col-sm-2' col_msg_error='col-sm-10' %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group {% if form.sex.errors %}has-error{% endif %}">
+              <label class="col-md-3 col-xs-3 col-sm-3 control-label" for="{{ form.sex.auto_id }}">
+                {{ form.sex.label }}
+              </label>
+              <div class="col-md-9 col-xs-9 col-sm-9">
+                <div class="form-inline">
+                  {{ form.sex }}
+                  <i class="ion ion-ios-medical item-required"></i>
+                </div>
+                {% include 'base/form.errors.html' with form_errors=form.sex.errors col_title_error='col-sm-2' col_msg_error='col-sm-10' %}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group {% if form.birthdate.errors %}has-error{% endif %}">
+              <label class="col-md-3 col-xs-3 col-sm-3 control-label" for="{{ form.birthdate.auto_id }}">
+                {{ form.birthdate.label }}
+              </label>
+              <div class="col-md-9 col-xs-9 col-sm-9">
+                <div class="form-inline">
+                  <div class="input-group">
+                    {{ form.birthdate }}
+                    <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                  </div>
+                  <i class="ion ion-ios-medical item-required"></i>
+                </div>
+                {% include 'base/form.errors.html' with form_errors=form.birthdate.errors col_title_error='col-sm-2' col_msg_error='col-sm-10' %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group {% if form.age.errors %}has-error{% endif %}">
+              <label class="col-md-3 col-xs-3 col-sm-3 control-label" for="{{ form.age.auto_id }}">
+                {{ form.age.label }}
+              </label>
+              <div class="col-md-9 col-xs-9 col-sm-9">
+                <div class="form-inline">
+                  {{ form.age }}
+                  <i class="ion ion-ios-medical item-required"></i>
+                </div>
+                {% include 'base/form.errors.html' with form_errors=form.age.errors col_title_error='col-sm-2' col_msg_error='col-sm-10' %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group {% if form.family_relationship.errors %}has-error{% endif %}">
+              <label class="col-md-3 col-xs-3 col-sm-3 control-label" for="{{ form.family_relationship.auto_id }}">
+                {{ form.family_relationship.label }}
+              </label>
+              <div class="col-md-9 col-xs-9 col-sm-9">
+                <div class="form-inline">
+                  {{ form.family_relationship }}
+                  <i class="ion ion-ios-medical item-required"></i>
+                </div>
+                {% include 'base/form.errors.html' with form_errors=form.family_relationship.errors col_title_error='col-sm-2' col_msg_error='col-sm-10' %}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group {% if form.family_head.errors %}has-error{% endif %}">
+              <label class="col-md-3 col-xs-3 col-sm-3 control-label" for="{{ form.family_head.auto_id }}">
+                {{ form.family_head.label }}
+              </label>
+              <div class="col-md-9 col-xs-9 col-sm-9">
+                <div class="form-inline">
+                  {{ form.family_head }}
+                </div>
+                <span class="text-muted">{{ form.family_head.help_text }}</span>
+                {% include 'base/form.errors.html' with form_errors=form.family_head.errors col_title_error='col-sm-2' col_msg_error='col-sm-10' %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group {% if form.marital_status.errors %}has-error{% endif %}">
+              <label class="col-md-3 col-xs-3 col-sm-3 control-label" for="{{ form.marital_status.auto_id }}">
+                {{ form.marital_status.label }}
+              </label>
+              <div class="col-md-9 col-xs-9 col-sm-9">
+                <div class="form-inline">
+                  {{ form.marital_status }}
+                  <i class="ion ion-ios-medical item-requerido"></i>
+                </div>
+                {% include 'base/form.errors.html' with form_errors=form.marital_status.errors col_title_error='col-sm-2' col_msg_error='col-sm-10' %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="form-group {% if form.observation.errors %}has-error{% endif %}">
+              <label class="col-md-3 col-xs-3 col-sm-3 control-label" for="{{ form.observation.auto_id }}">
+                {{ form.observation.label }}
+              </label>
+              <div class="col-md-9 col-xs-9 col-sm-9">
+                <div class="form-inline">
+                  {{ form.observation }}
+                </div>
+                {% include 'base/form.errors.html' with form_errors=form.observation.errors col_title_error='col-sm-2' col_msg_error='col-sm-10' %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-right">
+          <a href="{% url 'person_list' %}" class="btn btn-primary btn-sm">Atrás</a>
+          <button type="reset" class="btn btn-primary btn-sm" data-toggle="tooltip">Limpiar</button>
+          <button type="submit" class="btn btn-primary btn-sm" data-toggle="tooltip">{% if not form.instance.pk %}Registrar{% else %}Actualizar{% endif %}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+{% block extra_footer %}
+  <script>
+    $(document).ready(function(){
+      $('.datepicker').datepicker({
+        format: "yyyy-mm-dd",
+        language: "es",
+        autoclose: true,
+        todayHighlight: true,
+      });
+
+      //comportamiento del campo tiene_cedula en actualizar
+      {% if form.instance.pk %}
+        if( $("#id_identity_card_1").val().length>0 )
+        {
+          $("#id_has_identity_card").val("S").change();
+        }
+        else
+        {
+          $("#id_has_identity_card").val("N").change();
+          $("#block_identity_card").addClass('invisible');
+        }
+      {% endif %}
+    });
+
+    function _has_identity_card(option)
+    {
+      if( option=='N' )
+      {
+        $("#block_identity_card").addClass('invisible');
+        $("#id_identity_card_0").val(null);
+        $("#id_identity_card_1").val(null);
+        $("#id_identity_card_1").removeAttr('required');
+      }
+      else if( option=='S' )
+      {
+        $("#block_identity_card").removeClass('invisible');
+        $("#id_identity_card_1").attr('required', 'required');
+      }
+    }
+
+    function calculate_age(date)
+    {
+      var dateParts = fecha.split("-");
+      var date_js = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0, 2), dateParts[2].substr(3, 2), dateParts[2].substr(6, 2), dateParts[2].substr(9, 2));
+      today = new Date();
+      age = (today-date_js)/365/24/60/60/1000;
+      $("#id_age").val(age.toFixed(0));
+    }
+  </script>
+{% endblock %}

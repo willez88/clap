@@ -1,0 +1,82 @@
+{% extends 'base/base.html' %}
+{% load i18n %}
+{% block content_header_title %}Persona{% endblock %}
+{% block content %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="text-left">Listar <a href="{% url 'persona_registrar' %}" class="btn btn-success btn-sm pull-right">Registrar</a></h4>
+    </div>
+
+    <div class="panel-body">
+      <div class="row box-body table-responsive">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <table class="table table-striped table-hover table-bordered display dataTable" id="table">
+            <thead>
+              <tr>
+                <th>Grupo Familiar</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Cédula</th>
+                <th>Teléfono</th>
+                <th>correo</th>
+                <th>Sexo</th>
+                <th>Fecha de nacimiento</th>
+                <th>Edad</th>
+                <th>Parentesco</th>
+                <th>Jefe Familiar</th>
+                <th>Estado civil</th>
+                <th>Clap</th>
+                <th>Parroquia</th>
+                <th>Municipio</th>
+                <th>Estado</th>
+                <th>Observación</th>
+                <th>Operación</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for person in object_list %}
+                <tr>
+                  <td>{{ person.family_group.profile.user.username }}</td>
+                  <td>{{ person.first_name }} </td>
+                  <td>{{ person.last_name }}</td>
+                  {% if person.identity_card %}
+                    <td>{{ person.identity_card }}</td>
+                  {% else %}
+                    <td></td>
+                  {% endif %}
+                  <td>{{ person.phone }}</td>
+                  <td>{{ person.email }}</td>
+                  <td>{{ person.sex }}</td>
+                  <td>{{ person.birthdate }}</td>
+                  <td>{{ person.age }}</td>
+                  <td>{{ person.family_relationship }}</td>
+                  {% if person.family_head %}
+                    <td>Si</td>
+                  {% else %}
+                    <td>No</td>
+                  {% endif %}
+                  <td>{{ person.marital_status }}</td>
+                  <th>{{ person.family_group.clap_level.clap }}</th>
+                  <th>{{ person.family_group.clap_level.clap.parish }}</th>
+                  <th>{{ person.family_group.clap_level.clap.parish.municipality }}</th>
+                  <th>{{ person.family_group.clap_level.clap.parish.municipality.state }}</th>
+                  <td>{{ person.observation }}</td>
+                  <td> <a href="{% url 'person_update' person.id %}" data-toggle="tooltip" title="Actualizar"><i class="fa fa-pencil"></i></a> <a href="{% url 'person_delete' person.id %}" data-toggle="tooltip" title="Eliminar"><i class="fa fa-remove"></i</a> </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block extra_footer %}
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var table = $('#table').DataTable();
+
+      botton_datatable(table);
+    });
+  </script>
+{% endblock %}

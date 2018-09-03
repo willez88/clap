@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE|default:"es-ve" }}">
+  {% include 'base/head.html' %}
+  <body>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{% url 'base:home' %}">Clap</a>
+        </div>
+        {% if request.user.is_authenticated %}
+          <ul class="nav navbar-nav">
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Menú<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                {% if request.user.profile.level == 1 %}
+                  <li><a href="{% url 'user:state_level_list' %}">Estadal</a></li>
+                  <li><a href="{% url 'user:municipality_level_list' %}">Municipal</a></li>
+                  <li><a href="{% url 'user:parish_level_list' %}">Parroquial</a></li>
+                  <li><a href="{% url 'user:clap_level_list' %}">Clap</a></li>
+                  <li><a href="{% url 'user:street_leader_list' %}">Líder de Calle</a></li>
+                {% elif request.user.profile.level == 2 %}
+                  <li><a href="{% url 'user:municipality_level_list' %}">Municipal</a></li>
+                  <li><a href="{% url 'user:parish_level_list' %}">Parroquial</a></li>
+                  <li><a href="{% url 'user:clap_level_list' %}">Clap</a></li>
+                  <li><a href="{% url 'user:street_leader_list' %}">Líder de Calle</a></li>
+                {% elif request.user.profile.level == 3 %}
+                  <li><a href="{% url 'user:parish_level_list' %}">Parroquial</a></li>
+                  <li><a href="{% url 'user:clap_level_list' %}">Clap</a></li>
+                  <li><a href="{% url 'user:street_leader_list' %}">Líder de Calle</a></li>
+                {% elif request.user.profile.level == 4 %}
+                  <li><a href="{% url 'user:clap_level_list' %}">Clap</a></li>
+                  <li><a href="{% url 'user:street_leader_list' %}">Líder de Calle</a></li>
+                {% elif request.user.profile.level == 5 %}
+                  <li><a href="{% url 'user:street_leader_list' %}">Líder de Calle</a></li>
+                {% elif request.user.profile.level == 6 %}
+                  <li><a href="{% url 'user:family_group_list' %}">Grupo Familiar</a></li>
+                  <li><a href="{% url 'beneiciary:person_list' %}">Persona</a></li>
+                {% elif request.user.profile.level == 7 %}
+                  <li><a href="{% url 'beneiciary:person_list' %}">Persona</a></li>
+                {% endif %}
+              </ul>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> {{ request.user.username }}</a>
+              <ul class="dropdown-menu">
+                {% if request.user.profile.level == 1 %}
+                  <li><a href="{% url 'user:national_level_update' request.user.id %}"> Perfil</a></li>
+                {% elif request.user.profile.level == 2 %}
+                  <li><a href="{% url 'user:state_level_update' request.user.id %}"> Perfil</a></li>
+                {% elif request.user.profile.level == 3 %}
+                  <li><a href="{% url 'user:municipality_level_update' request.user.id %}"> Perfil</a></li>
+                {% elif request.user.profile.level == 4 %}
+                  <li><a href="{% url 'user:parish_level_update' request.user.id %}"> Perfil</a></li>
+                {% elif request.user.profile.level == 5 %}
+                  <li><a href="{% url 'user:clap_level_update' request.user.id %}"> Perfil</a></li>
+                {% elif request.user.profile.level == 6 %}
+                  <li><a href="{% url 'user:street_leader_update' request.user.id %}"> Perfil</a></li>
+                {% elif request.user.profile.level == 7 %}
+                  <li><a href="{% url 'user:family_group_update' request.user.id %}"> Perfil</a></li>
+                {% endif %}
+                <li><a href="{% url 'user:password_change' %}"> Cambiar Clave</a></li>
+                <li><a href="{% url 'user:logout' %}"><i class="fa fa-sign-out fa-lg" aria-hidden="true"></i> Salir</a></li>
+              </ul>
+            </li>
+          </ul>
+        {% else %}
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="{% url 'user:login' %}"><span class="glyphicon glyphicon-log-in"></span> Iniciar Sesión</a></li>
+          </ul>
+        {% endif %}
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <h2>{% block content_header_title %}Página Principal{% endblock %}</h2>
+      {% block content %}
+        {% if request.user.is_authenticated %}
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="text-center">{{ text1 }}</h4>
+            </div>
+            <div class="panel-body">
+              <h4 class="text-center">{{ text2 }}</h4>
+            </div>
+          </div>
+        {% endif %}
+      {% endblock %}
+    </div>
+    {% include 'base/footer.html' %}
+    {% block extra_footer %}
+
+    {% endblock %}
+  </body>
+</html>
