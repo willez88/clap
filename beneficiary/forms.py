@@ -185,5 +185,5 @@ class PersonForm(forms.ModelForm):
     class Meta:
         model = Person
         exclude = [
-            'family_head'
+            'family_group'
         ]

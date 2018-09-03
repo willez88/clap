@@ -234,7 +234,7 @@
           </div>
         </div>
         <div class="text-right">
-          <a href="{% url 'person_list' %}" class="btn btn-primary btn-sm">Atrás</a>
+          <a href="{% url 'beneficiary:person_list' %}" class="btn btn-primary btn-sm">Atrás</a>
           <button type="reset" class="btn btn-primary btn-sm" data-toggle="tooltip">Limpiar</button>
           <button type="submit" class="btn btn-primary btn-sm" data-toggle="tooltip">{% if not form.instance.pk %}Registrar{% else %}Actualizar{% endif %}</button>
         </div>
@@ -284,7 +284,7 @@
 
     function calculate_age(date)
     {
-      var dateParts = fecha.split("-");
+      var dateParts = date.split("-");
       var date_js = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0, 2), dateParts[2].substr(3, 2), dateParts[2].substr(6, 2), dateParts[2].substr(9, 2));
       today = new Date();
       age = (today-date_js)/365/24/60/60/1000;

@@ -9,13 +9,13 @@ from user.models import ClapLevel
 
 class PersonListView(ListView):
     model = Person
-    template_name = 'person.list.html'
+    template_name = 'beneficiary/person.list.html'
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.profile.level == 6 or self.request.user.profile.level == 7:
             return super(PersonListView, self).dispatch(request, *args, **kwargs)
         else:
-            return redirect('error_403')
+            return redirect('base:error_403')
 
     def get_queryset(self):
 
@@ -32,14 +32,14 @@ class PersonListView(ListView):
 class PersonCreateView(CreateView):
     model = Person
     form_class = PersonForm
-    template_name = 'person.create.html'
-    success_url = reverse_lazy('person_list')
+    template_name = 'beneficiary/person.create.html'
+    success_url = reverse_lazy('beneficiary:person_list')
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.profile.level == 6:
             return super(PersonCreateView, self).dispatch(request, *args, **kwargs)
         else:
-            return redirect('error_403')
+            return redirect('base:error_403')
 
     def get_form_kwargs(self):
         kwargs = super(PersonCreateView, self).get_form_kwargs()
@@ -56,7 +56,7 @@ class PersonCreateView(CreateView):
             self.object.identity_card = form.cleaned_data['identity_card']
         else:
             self.object.identity_card = None
-        self.object.phono = form.cleaned_data['phono']
+        self.object.phono = form.cleaned_data['phone']
         self.object.email = form.cleaned_data['email']
         self.object.sex = form.cleaned_data['sex']
         self.object.birthdate = form.cleaned_data['birthdate']
@@ -74,8 +74,8 @@ class PersonCreateView(CreateView):
 class PersonUpdateView(UpdateView):
     model = Person
     form_class = PersonForm
-    template_name = 'person.create.html'
-    success_url = reverse_lazy('person_list')
+    template_name = 'beneficiary/person.create.html'
+    success_url = reverse_lazy('beneficiary:person_list')
 
     def get_form_kwargs(self):
         kwargs = super(PersonUpdateView, self).get_form_kwargs()
@@ -85,7 +85,7 @@ class PersonUpdateView(UpdateView):
     def dispatch(self, request, *args, **kwargs):
         user = User.objects.get(username=self.request.user.username)
         if not Person.objects.filter(pk=self.kwargs['pk'],family_group__street_leader__profile__user=user):
-            return redirect('base_403')
+            return redirect('base:error_403')
         return super(PersonUpdateView, self).dispatch(request, *args, **kwargs)
 
     def get_initial(self):
@@ -109,11 +109,11 @@ class PersonUpdateView(UpdateView):
 
 class PersonDeleteView(DeleteView):
     model = Person
-    template_name = 'person.update.html'
-    success_url = reverse_lazy('person_list')
+    template_name = 'beneficiary/person.update.html'
+    success_url = reverse_lazy('beneficiary:person_list')
 
     def dispatch(self, request, *args, **kwargs):
         user = User.objects.get(username=self.request.user.username)
         if not Person.objects.filter(pk=self.kwargs['pk'],family_group__street_leader__profile__user=user):
-            return redirect('base_403')
+            return redirect('base:error_403')
         return super(PersonDeleteView, self).dispatch(request, *args, **kwargs)

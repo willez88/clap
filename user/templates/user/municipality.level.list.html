@@ -4,7 +4,7 @@
 {% block content %}
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h4 class="text-left">Listar - Estadal <a href="{% url 'user:state_level_create' %}" class="btn btn-success btn-sm pull-right">Registrar</a></h4>
+      <h4 class="text-left">Listar - Municipal <a href="{% url 'user:municipality_level_create' %}" class="btn btn-success btn-sm pull-right">Registrar</a></h4>
     </div>
 
     <div class="panel-body">
@@ -18,20 +18,22 @@
                 <th>Apellidos</th>
                 <th>Correo</th>
                 <th>Teléfono</th>
+                <th>Municipio</th>
                 <th>Estado</th>
                 <th>País</th>
               </tr>
             </thead>
             <tbody>
-              {% for st in object_list %}
+              {% for mun in object_list %}
                 <tr>
-                  <td> {{ st.profile.user.username }} </td>
-                  <td> {{ st.profile.user.first_name }} </td>
-                  <td> {{ st.profile.user.last_name }} </td>
-                  <td> {{ st.profile.user.email }} </td>
-                  <td> {{ st.profile.phone }} </td>
-                  <td> {{ st.state }}</td>
-                  <td> {{ st.state.country }} </td>
+                  <td> {{ mun.profile.user.username }} </td>
+                  <td> {{ mun.profile.user.first_name }} </td>
+                  <td> {{ mun.profile.user.last_name }} </td>
+                  <td> {{ mun.profile.user.email }} </td>
+                  <td> {{ mun.profile.telefono }} </td>
+                  <td> {{ mun.municipality }} </td>
+                  <td> {{ mun.municipality.state }} </td>
+                  <td> {{ mun.municipality.state.country }} </td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -45,7 +47,7 @@
   <script type="text/javascript">
     $(document).ready(function() {
       var table = $('#table').DataTable({
-        "order": [[ 5, "asc" ]]
+        "order": [[ 6, "asc" ],[ 5, "asc" ]]
       });
 
       button_datatable(table);

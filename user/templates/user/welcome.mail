@@ -1,11 +1,11 @@
-Ud ha sido registrado en el sistema Adulto Mayor.
+Ud ha sido registrado en el sistema Clap.
 
-Este correo fue enviado por el usuario del nivel {{ nivel }} {{ nombre }} {{ apellido }} {{ correo }}
+Este correo fue enviado por el usuario del nivel {{ level }} {{ first_name }} {{ last_name }} {{ email }}
 
 Las credenciales de su cuenta son:
 
 usuario: {{ username }}
-clave: {{ clave }}
+contraseña: {{ password }}
 
 Cambie su clave inmediatamente al entrar a su cuenta
 
@@ -15,7 +15,7 @@ haga caso omiso del mismo y eliminelo inmediatamente.
 Recomendamos agregar el correo {{emailapp|safe}} a su lista de contacto para futuros correos enviados por el sistema y
 para que su proveedor de correo no lo archive como spam.
 
-Bienvenido a Adulto Mayor
+Bienvenido a Sistema Clap
 
 Administrador del Sistema
 {{ admin|safe }}

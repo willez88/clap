@@ -64,4 +64,4 @@ class Error403TemplateView(TemplateView):
     @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
     """
 
-    template_name = 'base.error.403.html'
+    template_name = 'base/error.403.html'

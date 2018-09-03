@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Clap
+from .models import Clap, Sex, MaritalStatus, FamilyRelationship
 from .forms import ClapAdminForm
 
 class ClapAdmin(admin.ModelAdmin):
@@ -7,9 +7,25 @@ class ClapAdmin(admin.ModelAdmin):
     change_form_template = 'base/admin/change_form.html'
     list_display = ('code','name','parish',)
     list_filter = ('parish',)
-    #list_per_page = 25
     ordering = ('parish',)
-    #search_fields = ('codigo','nombre','parroquia',)
-
-## Registra el modelo ConsejoComunal en el panel administrativo
+    
 admin.site.register(Clap, ClapAdmin)
+
+
+class SexAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    ordering = ('name',)
+
+admin.site.register(Sex, SexAdmin)
+
+class MaritalStatusAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    ordering = ('name',)
+
+admin.site.register(MaritalStatus, MaritalStatusAdmin)
+
+class FamilyRelationshipAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    ordering = ('name',)
+
+admin.site.register(FamilyRelationship, FamilyRelationshipAdmin)

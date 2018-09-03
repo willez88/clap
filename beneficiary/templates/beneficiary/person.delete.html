@@ -11,7 +11,7 @@
         {% csrf_token %}
         <p>¿Estás seguro que deseas eliminar los datos de la Persona "{{ object }}"?</p>
         <div class="box-footer text-right">
-          <a href="{% url 'person_list' %}" class="btn btn-primary btn-sm">Atrás</a>
+          <a href="{% url 'user:person_list' %}" class="btn btn-primary btn-sm">Atrás</a>
           <button type="submit" class="btn btn-danger btn-sm" data-toggle="tooltip">Eliminar</button>
         </div>
       </form>

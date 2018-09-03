@@ -2,7 +2,7 @@
  * @brief Función que agrega los botones para exportar en un dataTable
  * @param table dataTable al cual se le agregan los botones
  */
-function inicializar_boton_datatable(table) {
+function button_datatable(table) {
   new $.fn.dataTable.Buttons(table, {
     buttons: [
       {

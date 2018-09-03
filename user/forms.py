@@ -140,7 +140,7 @@ class NationalLevelUpdateForm(ProfileForm):
         """
 
         super(NationalLevelUpdateForm, self).__init__(*args, **kwargs)
-        self.fields['Country'].required = False
+        self.fields['country'].required = False
         self.fields['password'].required = False
         self.fields['confirm_password'].required = False
         self.fields['password'].widget.attrs['disabled'] = True
@@ -266,7 +266,7 @@ class MunicipalityLevelForm(ProfileForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
-        super(MunicipalityForm, self).__init__(*args, **kwargs)
+        super(MunicipalityLevelForm, self).__init__(*args, **kwargs)
         state_level = StateLevel.objects.get(profile=user.profile)
         municipality_list = [('','Selecione...')]
         for mu in Municipality.objects.filter(state=state_level.state):
@@ -389,8 +389,8 @@ class ClapLevelForm(ProfileForm):
         super(ClapLevelForm, self).__init__(*args, **kwargs)
         parish_level = ParishLevel.objects.get(profile=user.profile)
         clap_list = [('','Selecione...')]
-        for cl in Clap.objects.filter(parish=parish_level.parsih):
-            clap_list.append( (cl.codigo,cl) )
+        for cl in Clap.objects.filter(parish=parish_level.parish):
+            clap_list.append( (cl.code,cl) )
         self.fields['clap'].choices = clap_list
 
     clap = forms.ChoiceField(

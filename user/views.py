@@ -81,7 +81,7 @@ class StateLevelCreateView(CreateView):
     model = User
     form_class = StateLevelForm
     template_name = 'user/state.level.create.html'
-    success_url = reverse_lazy('state_level_list')
+    success_url = reverse_lazy('user:state_level_list')
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.profile.level == 1:
@@ -203,7 +203,7 @@ class MunicipalityLevelCreateView(CreateView):
     model = User
     form_class = MunicipalityLevelForm
     template_name = 'user/municipality.level.create.html'
-    success_url = reverse_lazy('municipality_level_list')
+    success_url = reverse_lazy('user:municipality_level_list')
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.profile.level == 2:
@@ -278,7 +278,7 @@ class MunicipalityLevelUpdateView(UpdateView):
         return kwargs
 
     def get_initial(self):
-        initial_data = super(MunicipalityUpdateView, self).get_initial()
+        initial_data = super(MunicipalityLevelUpdateView, self).get_initial()
         profile = Profile.objects.get(user=self.object)
         initial_data['phone'] = profile.phone
         municipality_level = MunicipalityLevel.objects.get(profile=profile)
@@ -416,7 +416,7 @@ class ParishLevelUpdateView(UpdateView):
         initial_data['phone'] = profile.phone
         parish_level = ParishLevel.objects.get(profile=profile)
         initial_data['parish'] = parish_level.parish
-        return datos_iniciales
+        return initial_data
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -475,7 +475,7 @@ class ClapLevelCreateView(CreateView):
     model = User
     form_class = ClapLevelForm
     template_name = 'user/clap.level.create.html'
-    success_url = reverse_lazy('clap_level_list')
+    success_url = reverse_lazy('user:clap_level_list')
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.profile.level == 4:
@@ -535,7 +535,7 @@ class ClapLevelCreateView(CreateView):
 class ClapLevelUpdateView(UpdateView):
     model = User
     form_class = ClapLevelUpdateForm
-    template_name = 'user./clap.level.update.html'
+    template_name = 'user/clap.level.update.html'
     success_url = reverse_lazy('base:home')
 
     def dispatch(self, request, *args, **kwargs):
@@ -620,7 +620,7 @@ class StreetLeaderCreateView(CreateView):
     model = User
     form_class = ProfileForm
     template_name = 'user/street.leader.create.html'
-    success_url = reverse_lazy('street_leader_list')
+    success_url = reverse_lazy('user:street_leader_list')
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.profile.level == 5:
@@ -759,7 +759,7 @@ class FamilyGroupCreateView(CreateView):
     model = User
     form_class = ProfileForm
     template_name = 'user/family.group.create.html'
-    success_url = reverse_lazy('family_group_list')
+    success_url = reverse_lazy('user:family_group_list')
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.profile.level == 6:
@@ -814,7 +814,7 @@ class FamilyGroupCreateView(CreateView):
 class FamilyGroupUpdateView(UpdateView):
     model = User
     form_class = FamilyGroupUpdateForm
-    template_name = 'user/family.group.list.html'
+    template_name = 'user/family.group.update.html'
     success_url = reverse_lazy('base:home')
 
     def dispatch(self, request, *args, **kwargs):

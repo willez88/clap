@@ -1,0 +1,60 @@
+{% extends 'base/base.html' %}
+{% load i18n %}
+{% block content_header_title %}{% trans 'Usuario' %}{% endblock %}
+{% block content %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="text-left">Listar - Jefe Familiar <a href="{% url 'user:family_group_create' %}" class="btn btn-success btn-sm pull-right">Registrar</a></h4>
+  </div>
+
+  <div class="panel-body">
+    <div class="row table-responsive">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <table class="table table-striped table-hover table-bordered display dataTable" id="table">
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+              <th>Clap</th>
+              <th>Parroquia</th>
+              <th>Municipio</th>
+              <th>Estado</th>
+              <th>País</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for fg in object_list %}
+              <tr>
+                <td> {{ fg.profile.user.username }} </td>
+                <td> {{ fg.profile.user.first_name }} </td>
+                <td> {{ fg.profile.user.last_name }} </td>
+                <td> {{ fg.profile.user.email }} </td>
+                <td> {{ fg.profile.phone }} </td>
+                <td> {{ fg.street_leader.clap_level.clap }} </td>
+                <td> {{ fg.street_leader.clap_level.clap.parish }} </td>
+                <td> {{ fg.street_leader.clap_level.clap.parish.municipality }} </td>
+                <td> {{ fg.street_leader.clap_level.clap.parish.municipality.state }} </td>
+                <td> {{ fg.street_leader.clap_level.clap.parish.municipality.state.country }} </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_footer %}
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var table = $('#table').DataTable({
+        "order": [[ 8, "asc" ],[ 7, "asc" ],[ 6, "asc" ],[ 5, "asc" ]]
+      });
+
+      button_datatable(table);
+    });
+  </script>
+{% endblock %}
