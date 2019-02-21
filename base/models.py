@@ -8,7 +8,7 @@ class Country(models.Model):
     Clase que contiene los paises
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     ## Nombre del pais
@@ -19,7 +19,7 @@ class Country(models.Model):
         Función para representar la clase de forma amigable
 
         @author William Páez (paez.william8 at gmail.com)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         return self.name
@@ -29,7 +29,7 @@ class State(models.Model):
     Clase que contiene los estados que se encuentran en un país
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     ## Nombre del Estado
@@ -43,7 +43,7 @@ class State(models.Model):
         Función para representar la clase de forma amigable
 
         @author William Páez (wpaez at cenditel.gob.ve)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         return self.name
@@ -53,7 +53,7 @@ class Municipality(models.Model):
     Clase que contiene los municipios que se encuentran en un estado
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     ## Nombre del Municipio
@@ -67,7 +67,7 @@ class Municipality(models.Model):
         Función para representar la clase de forma amigable
 
         @author William Páez (paez.william8 at gmail.com)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         return self.name
@@ -77,7 +77,7 @@ class City(models.Model):
     Clase que contiene las ciudades que se encuentran en un estado
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     ## Nombre de la Ciudad
@@ -91,7 +91,7 @@ class City(models.Model):
         Función para representar la clase de forma amigable
 
         @author William Páez (paez.william8 at gmail.com)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         return self.name
@@ -101,7 +101,7 @@ class Parish(models.Model):
     Clase que contiene las parroquias que se encuentran un municipio
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     ## Nombre de la Parroquia
@@ -115,7 +115,7 @@ class Parish(models.Model):
         Función para representar la clase de forma amigable
 
         @author William Páez (paez.william at gmail.com)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         return self.name
@@ -125,7 +125,7 @@ class Clap(models.Model):
     Clase que contiene los clap que se encuentran en una parroquia
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     ## Código único que identifica al clap
@@ -144,7 +144,7 @@ class Clap(models.Model):
         Función para representar la clase de forma amigable
 
         @author William Páez (paez.william8 at gmail.com)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         return self.code + ' | ' + self.name
@@ -154,7 +154,7 @@ class Sex(models.Model):
     Clase que contiene el sexo de una persona
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     name = models.CharField(max_length=20)

@@ -11,7 +11,7 @@ class Profile(models.Model):
     Clase que gestiona el perfil de los usuarios
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     ## Establece el teléfono del usuario
@@ -33,7 +33,7 @@ class Profile(models.Model):
         Función para representar la clase de forma amigable
 
         @author William Páez (paez.william8 at gmail.com)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         return '%s %s' % (self.user.first_name, self.user.last_name)
@@ -43,7 +43,7 @@ class Profile(models.Model):
         Meta clase para la representación en singular y plural de la clase
 
         @author William Páez (wpaez at cenditel.gob.ve)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         verbose_name = _('Perfil')
@@ -71,7 +71,7 @@ class StateLevel(models.Model):
     Clase que gestiona el perfil de los usuarios que pertenecen al nivel estadal
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     ## Establec la relación con el estado
@@ -89,7 +89,7 @@ class StateLevel(models.Model):
         Función para representar la clase de forma amigable
 
         @author William Páez (paez.william8 at gmail.com)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         return '%s %s' % (self.profile.user.first_name, self.profile.user.last_name)
@@ -99,7 +99,7 @@ class StateLevel(models.Model):
         Meta clase para la representación en singular y plural de la clase
 
         @author William Páez (paez.william8 at gmail.com)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         verbose_name = _('NIvel Estadal')
@@ -110,7 +110,7 @@ class MunicipalityLevel(models.Model):
     Clase que gestiona el perfil de los usuarios que pertenecen al nivel municipal
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     ## Establec la relación con el municipio
@@ -128,7 +128,7 @@ class MunicipalityLevel(models.Model):
         Función para representar la clase de forma amigable
 
         @author William Páez (paez.william8 at gmail.com)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         return '%s %s' % (self.profile.user.first_name, self.profile.user.last_name)
@@ -138,7 +138,7 @@ class MunicipalityLevel(models.Model):
         Meta clase para la representación en singular y plural de la clase
 
         @author William Páez (paez.william8 at gmail.com)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         verbose_name = _('Nivel Municipal')
@@ -149,7 +149,7 @@ class ParishLevel(models.Model):
     Clase que gestiona el perfil de los usuarios que pertenecen al nivel parroquial
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     ## Establece la relación con la parroquia
@@ -167,7 +167,7 @@ class ParishLevel(models.Model):
         Función para representar la clase de forma amigable
 
         @author William Páez (paez.william8 at gmail.com)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         return '%s %s' % (self.profile.user.first_name, self.profile.user.last_name)
@@ -177,7 +177,7 @@ class ParishLevel(models.Model):
         Meta clase para la representación en singular y plural de la clase
 
         @author William Páez (paez.william8 at gmail.com)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         verbose_name = _('Nivel Parroquial')
@@ -188,7 +188,7 @@ class ClapLevel(models.Model):
     Clase que gestiona el perfil de los usuarios que pertenecen al nivel clap
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     clap = models.OneToOneField(
@@ -211,7 +211,7 @@ class StreetLeader(models.Model):
     Clase que gestiona el perfil de los usuarios que pertenecen al nivel Líder de Calle
 
     @author William Páez (wpaez at cenditel.gob.ve)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     clap_level = models.OneToOneField(

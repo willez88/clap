@@ -11,7 +11,7 @@ class ProfileForm(forms.ModelForm):
     Clase que contiene los campos del formulario de perfil del usuario
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     ## Username para identificar al usuario, en este caso se usa la cédula
@@ -117,7 +117,7 @@ class ProfileForm(forms.ModelForm):
         Meta clase del formulario que establece algunas propiedades
 
         @author William Páez (paez.william8 at gmail.com)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         model = User
@@ -128,7 +128,7 @@ class NationalLevelUpdateForm(ProfileForm):
     Clase que contiene el formulario para poder actualizar los datos de un usuario que tiene nivel Nacional
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     def __init__(self, *args, **kwargs):
@@ -136,7 +136,7 @@ class NationalLevelUpdateForm(ProfileForm):
         Función que inicializa el formulario
 
         @author William Páez (paez.william8 at gmail.com)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         super(NationalLevelUpdateForm, self).__init__(*args, **kwargs)
@@ -170,7 +170,7 @@ class NationalLevelUpdateForm(ProfileForm):
         Meta clase del formulario que establece algunas propiedades
 
         @author William Páez (paez.william8 at gmail.com)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         model = User
@@ -211,7 +211,7 @@ class StateLevelUpdateForm(ProfileForm):
     Clase que contiene el formulario para poder actualizar los datos de un usuario que tiene nivel estadal
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     def __init__(self, *args, **kwargs):
@@ -219,7 +219,7 @@ class StateLevelUpdateForm(ProfileForm):
         Función que inicializa el formulario
 
         @author William Páez (paez.william8 at gmail.com)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         super(StateLevelUpdateForm, self).__init__(*args, **kwargs)
@@ -253,7 +253,7 @@ class StateLevelUpdateForm(ProfileForm):
         Meta clase del formulario que establece algunas propiedades
 
         @author William Páez (wpaez at cenditel.gob.ve)
-        @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+        @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
         """
 
         model = User

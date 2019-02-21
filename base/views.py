@@ -12,7 +12,7 @@ class HomeTemplateView(TemplateView):
     Clase para mostrar la página de inicio
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     template_name = 'base/base.html'
@@ -61,7 +61,7 @@ class Error403TemplateView(TemplateView):
     Clase para mostrar error de permiso
 
     @author William Páez (paez.william8 at gmail.com)
-    @copyright <a href='http://www.gnu.org/licenses/gpl-3.0.html'>GNU Public License versión 3 (GPLv3)</a>
+    @copyright <a href='​http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
     """
 
     template_name = 'base/error.403.html'
