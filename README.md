@@ -54,11 +54,11 @@ Nos movemos a la carpeta proyectos_django, descargamos el sistema y entramos a l
 
     (clap) ~$ cd ../../proyectos_django/
 
-    (clap) ~$ git clone https://gitlab.com/willez/clap.git
+    (clap) ~$ git clone https://github.com/willez88/clap.git
 
     (clap) ~$ cd clap/
 
-    (clap) ~$ cp clap/settings.py_example clap/settings.py
+    (clap) ~$ cp clap/settings.defautl.py clap/settings.py
 
 Tendremos las carpetas estructuradas de la siguiente manera
 
